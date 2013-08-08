@@ -8,6 +8,8 @@ def readpos():
     plt.clf()
     fig = plt.figure(1)
     sp = fig.add_subplot(111)
+
+    #testing123
     
     colors = iter(cm.rainbow(np.linspace(0,1,10)))
     length = (32*32*32)-30
