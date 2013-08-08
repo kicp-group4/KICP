@@ -26,21 +26,36 @@ void update_density(Shape shape, double a) {
 	//loop through every particle, index of relevant cell is floor( x/(grid size) )
 	for (n = 0; n < N_PARTICLES; n++) {
 	
-		i = floor(pos.x[n] / scale);
+	  i = floor((pos.x[n]/scale) - 0.5);
 		dx = pos.x[n]/scale - i ;
 		tx = 1.0 - dx;
+		if (i < 0){
+		  i = GRID_SIZE - 1;
+		  dx = (pos.x[n]/scale);
+		  tx = 1.0 - dx;
+		}
 		i_max = i + 1;
 		if (i_max == GRID_SIZE) i_max = 0;
 		
-		j = floor(pos.y[n] / scale);
+		j = floor((pos.y[n] / scale) - 0.5);
 		dy = pos.y[n]/scale - j ;
 		ty = 1.0 - dy;		
+		if (j < 0){
+		  j = GRID_SIZE - 1;
+		  dy = (pos.y[n]/scale);
+		  ty = 1.0 - dy;
+		}
 		j_max = j + 1;
 		if (j_max == GRID_SIZE) j_max = 0;
 		
-		k = floor(pos.z[n] / scale);
+		k = floor((pos.z[n] / scale) - 0.5);
 		dz = pos.z[n]/scale - k;
 		tz = 1.0 - dz;
+		if (k < 0){
+		  k =  GRID_SIZE - 1;
+		  dz = (pos.z[n]/scale);
+		  tz = 1.0 - dz;
+		}
 		k_max = k + 1;
 		if (k_max == GRID_SIZE) k_max = 0;
 
@@ -93,25 +108,40 @@ void update_particles(Shape shape, double a) {
 	//calculate acceleration for each grid
 	int n;
 	for (n = 0; n < N_PARTICLES; n++) {
-		i = floor(pos.x[n] / scale);
+		i = floor((pos.x[n]/scale) - 0.5);
 		dx = pos.x[n]/scale - i ;
 		tx = 1.0 - dx;
+		if (i < 0){
+		  i = GRID_SIZE - 1;
+		  dx = (pos.x[n]/scale);
+		  tx = 1.0 - dx;
+		}
 		i_min = i - 1;
 		i_max = i + 1;
 		if (i_min < 0) i_min = GRID_SIZE - 1;
 		if (i_max == GRID_SIZE) i_max = 0;
 		
-		j = floor(pos.y[n] / scale);
+		j = floor((pos.y[n] / scale) - 0.5);
 		dy = pos.y[n]/scale - j ;
 		ty = 1.0 - dy;		
+		if (j < 0){
+		  j = GRID_SIZE - 1;
+		  dy = (pos.y[n]/scale);
+		  ty = 1.0 - dy;
+		}
 		j_min = j - 1;
 		j_max = j + 1;
 		if (j_min < 0) j_min = GRID_SIZE - 1;
 		if (j_max == GRID_SIZE) j_max = 0;
 		
-		k = floor(pos.z[n] / scale);
+		k = floor((pos.z[n] / scale) - 0.5);
 		dz = pos.z[n]/scale - k;
 		tz = 1.0 - dz;
+		if (k < 0){
+		  k =  GRID_SIZE - 1;
+		  dz = (pos.z[n]/scale);
+		  tz = 1.0 - dz;
+		}
 		k_min = k - 1;
 		k_max = k + 1;
 		if (k_min < 0) k_min = GRID_SIZE - 1;
