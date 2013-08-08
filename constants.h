@@ -5,7 +5,7 @@
 
 #define L_BOX (10.0*3.086e16)
 #define GRID_SIZE 32
-#define N_PARTICLES 32*32*32
+#define N_PARTICLES 1000
 #define H_0 72
 #define G 6.67384e-11
 #define OMEGA_M 0.27
