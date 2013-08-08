@@ -15,10 +15,15 @@ void ic(double a) {
 	 * 
 	 */
 	// POSITION + VELOCITY 
+<<<<<<< HEAD
 
 	/* NOTE: D_+(a)=a/a_0, but we assume a_0=1 throughout */
 	Np = 10;
 	L_NP = L_BOX / Np;
+=======
+	Np = 32;
+	L_NP = L_BOX / (Np-1);
+>>>>>>> 53aa87222457e272218503d479018385e8563e9b
 	k = 2 * PI / L_BOX;
 	D_aini = a;
 
@@ -29,12 +34,17 @@ void ic(double a) {
 	D_dot = ((H_0 * 3.241e-20) * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
 
 	for (i = 0; i < Np; i++) {
-		q = i * L_NP;
+	  q = i * L_NP;
 		for (j = 0; j < Np; j++) {
 			for (m = 0; m < Np; m++) {
+<<<<<<< HEAD
 				/* NOTE: 2*PI*q/L_BOX = k*q = 2*PI*i/Np */
 				pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(2*PI*i/Np)) / R_0 / a;
 				momentum.x[i + Np * (j + Np * m)] = a*(a * D_dot * amp * sin(2*PI*i/Np)) / (M_PARTICLE * V_0);
+=======
+				pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(k * q)) / R_0 / a;
+				momentum.x[i + Np * (j + Np * m)] = a*(A_INITIAL * D_dot * amp * sin(k * q)) / (V_0);
+>>>>>>> 53aa87222457e272218503d479018385e8563e9b
 				pos.y[i + Np * (j + Np * m)] = (j * L_NP) / R_0 / a;
 				momentum.y[i + Np * (j + Np * m)] = 0;
 				pos.z[i + Np * (j + Np * m)] = (m * L_NP) / R_0 / a;
