@@ -17,7 +17,7 @@ void ic(double a) {
 	// POSITION + VELOCITY 
 
 	/* NOTE: D_+(a)=a/a_0, but we assume a_0=1 throughout */
-	Np = 10;
+	Np = GRID_SIZE;
 	L_NP = L_BOX / (Np-1);
 	k = 2 * PI / L_BOX;
 	D_aini = a;
