@@ -153,7 +153,12 @@ void update_particles(Shape shape, double a) {
 					+ (-(phi[i_max][j][k_max2] - phi[i_max][j][k_min2]) / 2.0) * dx * ty * dz
 					+ (-(phi[i][j_max][k_max2] - phi[i][j_max][k_min2]) / 2.0) * tx * dy * dz
 					+ (-(phi[i_max][j_max][k_max2] - phi[i_max][j_max][k_min2]) / 2.0) * dx * dy * dz;
+			
+			if (j == 0 & k == 0) {
+			  printf("%g \t",accelx);
+			}
 			break;
+		     
 		default:
 			fprintf(stderr,"Bad shape value (%d) in updateValues::update_density\n",(int)shape);
 		}
