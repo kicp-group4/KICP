@@ -26,7 +26,7 @@ int main(){
 	output(a,"pos.dat","density.dat");
 
 	int n;
-	for(n=0;n<10;n++) {
+	for(n=0;n<20;n++) {
 		poissonSolver(a);
 		printf("poisson!\n");
 		

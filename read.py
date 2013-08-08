@@ -12,7 +12,7 @@ def readpos():
 
     #testing123
     
-    colors = iter(cm.rainbow(np.linspace(0,1,10)))
+    colors = iter(cm.rainbow(np.linspace(0,1,20)))
     length = 1000 - 8
     length = 32*32*32 - 30
 
@@ -22,20 +22,20 @@ def readpos():
     A_INITIAL = 0.2
     a_cross = 10.0 * A_INITIAL
     Np = 32
-    L_BOX = float((10.0*3.086e16))
+    L_BOX = 32.0
     L_NP = L_BOX / (Np-1)
     k = 2 * PI / L_BOX
     D_aini = 1
-    amp = -1.0 / (a_cross * k / A_INITIAL)
+    amp = 1.0 / (a_cross * k / A_INITIAL)
     OMEGA_M = 0.23
     OMEGA_L = 0.77
     r_0 = (10.0*3.086e16)/32.0
 
     a_temp = A_INITIAL - (DELTA_A / 2.0)
-    D_dot = (H_0 * 3.241e-20)*(math.sqrt(OMEGA_M + OMEGA_L * a_temp**3.0) / math.sqrt(a_temp)) / A_INITIAL;
+    D_dot =(math.sqrt(OMEGA_M + OMEGA_L * a_temp**3.0) / math.sqrt(a_temp)) / A_INITIAL;
    
     temp_a = A_INITIAL
-    for dt in range(1):
+    for dt in range(20):
         x = []
         v = []
         for i in range(7):
@@ -49,15 +49,17 @@ def readpos():
         for i in range(length):
             a = f.readline()
 
+        print a
+
         xtest = []
         vtest = []
         for i in range(32):
-            checkx = (float(i)*L_NP + (temp_a/A_INITIAL)*amp*math.sin(k*float(i)*L_NP))/(3.086e16)
+            checkx = (float(i)*L_NP + (temp_a/A_INITIAL)*amp*math.sin(k*float(i)*L_NP))
             xtest.append(checkx)
-            checkv = temp_a*D_dot*amp*math.sin(k*float(i)*L_NP)
+            checkv = temp_a*temp_a*D_dot*amp*math.sin(k*float(i)*L_NP)
             vtest.append(checkv)
         
-        lx = 9
+        lx = 32
         lv = max(v)
         
         c = next(colors)
@@ -99,15 +101,14 @@ def readdens():
     length = 1000 - 1
     length = 32*32*32 - 30
 
-    for dt in range(1):
+    for dt in range(2):
         x = []
         a = f.readline()
         a = f.readline()
         data = a.split()
         dens = []
         for i in range(32):
-            step = (10.0/32.0)*float(i)
-            x.append(step)
+            x.append(i)
             dens.append(data[i])
         
         lx = 9

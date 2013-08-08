@@ -1,3 +1,4 @@
+CFLAGS = -g
 
 objects = pm.o ic.o output.o poissonSolver.o updateValues.o
 
@@ -5,7 +6,7 @@ PM_G4 : $(objects)
 	gcc  $(objects) -L/usr/lib -lfftw3 -lm -o PM_G4
 
 pm.o : pm.c constants.h vec3D.h ic.h shape.h updateValues.h poissonSolver.h
-	gcc -c pm.c
+	gcc $(CFLAGS) -c pm.c
 
 ic.o : ic.c ic.h constants.h vec3D.h
 	gcc -c ic.c
