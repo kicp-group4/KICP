@@ -59,8 +59,8 @@ void update_density(Shape shape, double a) {
 		k_max = k + 1;
 		if (k_max == GRID_SIZE) k_max = 0;
 
-		printf("%g\t%g\t%g\n",pos.x[n],pos.y[n],pos.z[n]);
-		printf("%d\t%d\t%d\n",i,j,k);
+		/* printf("%g\t%g\t%g\n",pos.x[n],pos.y[n],pos.z[n]); */
+		/* printf("%d\t%d\t%d\n",i,j,k); */
 		
 
 		switch(shape) {

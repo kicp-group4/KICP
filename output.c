@@ -21,13 +21,13 @@ void output(double a, char *out_xyz_file, char *out_density) {
 
 	for (i = 0; i < N_PARTICLES; i++) {
 		fprintf(output, "%g \t %g \t %g",
-				pos.x[i] * R_0 * a/ 3e16,
-				pos.y[i] * R_0 * a/ 3e16,
-				pos.z[i] * R_0 * a/ 3e16);
+				pos.x[i] * R_0 * a/ 3.086e16,
+				pos.y[i] * R_0 * a/ 3.086e16,
+				pos.z[i] * R_0 * a/ 3.086e16);
 		fprintf(output, " \t %g \t %g \t %g \n",
-				momentum.x[i] * M_PARTICLE * V_0 / a,
-				momentum.y[i] * M_PARTICLE * V_0 / a,
-				momentum.z[i] * M_PARTICLE * V_0 / a);
+				momentum.x[i] * V_0 / a,
+				momentum.y[i] * V_0 / a,
+				momentum.z[i] * V_0 / a);
 	}
 	fprintf(output, "\n**********\n");
 	fclose(output);

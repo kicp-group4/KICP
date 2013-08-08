@@ -12,9 +12,10 @@ def readpos():
     #testing123
     
     colors = iter(cm.rainbow(np.linspace(0,1,10)))
-    length = (32*32*32)-30
+    length = 1000 - 8
+    length = 32*32*32 - 30
     
-    for dt in range(10):
+    for dt in range(5):
         x = []
         v = []
         for i in range(7):
@@ -27,15 +28,15 @@ def readpos():
             v.append(data[3])
         for i in range(length):
             a = f.readline()
-         
-        print x           
-        lx = 11
+            
+        lx = 9
         lv = max(v)
         
         c = next(colors)
-        sp.plot(x,v,'-o',color=c)
+        sp.plot(x,v,'o',color=c)
         a = "Step #"+str(dt)
         plt.text(lx,lv,a,color=c)
+
     plt.show()
         
    
