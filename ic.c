@@ -18,28 +18,38 @@ void ic(double a) {
 
 	/* NOTE: D_+(a)=a/a_0, but we assume a_0=1 throughout */
 	Np = GRID_SIZE;
-	L_NP = L_BOX / (Np-1);
 	k = 2 * PI / L_BOX;
 	D_aini = a;
 
 	double a_cross = 10.0 * A_INITIAL;
-	double amp = -1.0 / (a_cross * k);
+	double amp = 1.0 / (a_cross * k);
 
 	double a_temp = A_INITIAL - DELTA_A / 2.0;
-	D_dot = ((H_0 * 3.241e-20) * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
+	D_dot = (H_0 * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
 
 	for (i = 0; i < Np; i++) {
-	  q = i * L_NP;
+	  q = i;
 		for (j = 0; j < Np; j++) {
 			for (m = 0; m < Np; m++) {
 				/* NOTE: 2*PI*q/L_BOX = k*q = 2*PI*i/Np */
-				pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(2*PI*i/Np)) / R_0 / a;
-				momentum.x[i + Np * (j + Np * m)] = a*(A_INITIAL * D_dot * amp * sin(2*PI*i/Np)) / (V_0);
-				pos.y[i + Np * (j + Np * m)] = (j * L_NP) / R_0 / a;
+			  pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(2*PI*i/Np));
+	/* printf("%d \t %d \t %d \t %g",i,j,m,( D_aini * amp * sin(2*PI*(i+0.5)/Np))); */
+		
+			  if (pos.x[i + Np * (j + Np * m)] >= GRID_SIZE) {
+			    pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] - (float)(GRID_SIZE);
+			  }
+			  if (pos.x[i + Np * (j + Np * m)] < 0) {
+			    pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + (float)(GRID_SIZE);
+			  }
+				momentum.x[i + Np * (j + Np * m)] = a*(A_INITIAL * D_dot * amp * sin(2*PI*i/Np))*T_0;
+				pos.y[i + Np * (j + Np * m)] =j;
 				momentum.y[i + Np * (j + Np * m)] = 0;
-				pos.z[i + Np * (j + Np * m)] = (m * L_NP) / R_0 / a;
+				pos.z[i + Np * (j + Np * m)] =m;
 				momentum.z[i + Np * (j + Np * m)] = 0;
+			
 			}
 		}
+	       
 	}
+
 }

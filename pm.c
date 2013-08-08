@@ -5,7 +5,6 @@
 #include "shape.h"
 #include "updateValues.h"
 #include "poissonSolver.h"
-#include <unistd.h>
 
 void init();
 void cleanup();
@@ -19,7 +18,6 @@ double a = A_INITIAL;
 Shape shape = CIC;
    
 int main(){
-	unlink("pos.dat"); unlink("density.dat");
 	init();
 	ic(a);
 	printf("init done!\n");
@@ -28,7 +26,7 @@ int main(){
 	output(a,"pos.dat","density.dat");
 
 	int n;
-	for(n=0;n<10;n++) {
+	for(n=0;n<20;n++) {
 		poissonSolver(a);
 		printf("poisson!\n");
 		
