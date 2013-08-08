@@ -21,7 +21,7 @@
 
 #define R_0 (L_BOX/GRID_SIZE)
 #define T_0 (1/(H_0*3.241e-20))
-#define V_0 (T_0/R_0)
+#define V_0 (R_0/T_0)
 #define RHO_0 (3*OMEGA_M/(8*PI*G*T_0*T_0))
 #define PHI_0 (V_0*V_0)
 
