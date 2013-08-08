@@ -4,15 +4,15 @@
 extern double phi[GRID_SIZE][GRID_SIZE][GRID_SIZE], delta[GRID_SIZE][GRID_SIZE][GRID_SIZE];
  
 inline static double greenFunc(int,int,int,double);
+
+static const unsigned int fft_size = GRID_SIZE*GRID_SIZE*(GRID_SIZE/2+1);
+static const unsigned int real_size = GRID_SIZE*GRID_SIZE*GRID_SIZE;
+static fftw_complex *F_delta;
+static fftw_plan r2c, c2r;
  
 void poissonSolver(double a) {
-    const unsigned int fft_size = GRID_SIZE*GRID_SIZE*(GRID_SIZE/2+1);
-    const unsigned int real_size = GRID_SIZE*GRID_SIZE*GRID_SIZE;
-    fftw_complex *F_delta = (fftw_complex*)fftw_malloc(fft_size*sizeof(fftw_complex));
-    fftw_plan r2c = fftw_plan_dft_r2c_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE,
-                    &delta[0][0][0], F_delta, FFTW_ESTIMATE);
-    fftw_plan c2r = fftw_plan_dft_c2r_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE,
-            F_delta, &phi[0][0][0], FFTW_ESTIMATE);
+	r2c = fftw_plan_dft_r2c_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, &delta[0][0][0], F_delta, FFTW_ESTIMATE);
+    c2r = fftw_plan_dft_c2r_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, F_delta, &phi[0][0][0], FFTW_ESTIMATE);
  
     fftw_execute(r2c);
  
@@ -34,10 +34,6 @@ void poissonSolver(double a) {
     for (i=0, p=&phi[0][0][0]; i<real_size; i++,p++) {
         *p /= real_size;
     }
- 
-    fftw_free(F_delta);
-    fftw_destroy_plan(r2c);
-    fftw_destroy_plan(c2r);
 }
  
 inline static double greenFunc(int l, int m, int n, double a) {
@@ -47,4 +43,14 @@ inline static double greenFunc(int l, int m, int n, double a) {
  
     if (l == 0 && m == 0 && n == 0) return 0.0f;
     return -3./(8.*a)/(s_x*s_x + s_y*s_y + s_z*s_z);
+}
+
+void poissonSolver_init() {
+	F_delta = (fftw_complex*)fftw_malloc(fft_size*sizeof(fftw_complex));
+}
+
+void poissonSolver_cleanup() {
+	fftw_free(F_delta);
+	fftw_destroy_plan(r2c);
+	fftw_destroy_plan(c2r);
 }

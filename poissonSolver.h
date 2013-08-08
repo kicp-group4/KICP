@@ -5,6 +5,8 @@
 #include <math.h>
 
 void poissonSolver(double a);
+void poissonSolver_init(void);
+void poissonSolver_cleanup(void);
 
 
 #endif /* POISSONSOLVER_H_ */
