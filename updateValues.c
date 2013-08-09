@@ -41,17 +41,17 @@ void update_density(Shape shape, double a) {
 
 		switch (shape) {
 		case NGP:
-			rho[i][j][k] += 1.0;
+			rho[i][j][k] += M_PARTICLE;
 			break;
 		case CIC:
-			rho[i][j][k] += tx * ty * tz;
-			rho[i_max][j][k] += dx * ty * tz;
-			rho[i][j_max][k] += tx * dy * tz;
-			rho[i][j][k_max] += tx * ty * dz;
-			rho[i][j_max][k_max] += tx * dy * dz;
-			rho[i_max][j_max][k] += dx * dy * tz;
-			rho[i_max][j][k_max] += dx * ty * dz;
-			rho[i_max][j_max][k_max] += dx * dy * dz;
+			rho[i][j][k] += tx * ty * tz *  M_PARTICLE;
+			rho[i_max][j][k] += dx * ty * tz *  M_PARTICLE;
+			rho[i][j_max][k] += tx * dy * tz *  M_PARTICLE;
+			rho[i][j][k_max] += tx * ty * dz *  M_PARTICLE;
+			rho[i][j_max][k_max] += tx * dy * dz *  M_PARTICLE;
+			rho[i_max][j_max][k] += dx * dy * tz *  M_PARTICLE;
+			rho[i_max][j][k_max] += dx * ty * dz *  M_PARTICLE;
+			rho[i_max][j_max][k_max] += dx * dy * dz *  M_PARTICLE;
 			break;
 		default:
 			fprintf(stderr,"Bad shape value (%d) in updateValues::update_density\n",(int) shape);

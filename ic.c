@@ -16,7 +16,7 @@ void ic(double a) {
 	 */
 	// POSITION + VELOCITY 
 	/* NOTE: D_+(a)=a/a_0, but we assume a_0=1 throughout */
-	Np = GRID_SIZE;
+	Np = N_P_1D;
 	k = 2 * PI / L_BOX;
 	D_aini = a;
 
@@ -28,25 +28,25 @@ void ic(double a) {
 	D_dot = (H_0 * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
 
 	for (i = 0; i < Np; i++) {
-		q = i;
+	  q = i*(L_BOX/Np);
 		for (j = 0; j < Np; j++) {
 			for (m = 0; m < Np; m++) {
 				/* NOTE: 2*PI*q/L_BOX = k*q = 2*PI*i/Np */
 				pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(2 * PI * i / Np));
 
 				if (pos.x[i + Np * (j + Np * m)] >= GRID_SIZE) {
-					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] - (float) (GRID_SIZE);
+					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] - L_BOX;
 				}
 				if (pos.x[i + Np * (j + Np * m)] < 0) {
-					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + (float) (GRID_SIZE);
+					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + L_BOX;
 				}
 
 				momentum.x[i + Np * (j + Np * m)] = a_temp * (a_temp * D_dot * amp * sin(2 * PI * i / Np)) * T_0;
-				pos.y[i + Np * (j + Np * m)] = j;
+				pos.y[i + Np * (j + Np * m)] = j*(L_BOX/Np);
 				momentum.y[i + Np * (j + Np * m)] = 0;
-				pos.z[i + Np * (j + Np * m)] = m;
+				pos.z[i + Np * (j + Np * m)] = m*(L_BOX/Np);
 				momentum.z[i + Np * (j + Np * m)] = 0;
-			
+				
 			}
 		}
 	       

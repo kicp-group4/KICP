@@ -12,30 +12,23 @@ def readpos():
     
     colors = iter(cm.rainbow(np.linspace(0,1,20)))
     length = 1000 - 8
-    length = 64*64*64 - 62
+    #length = 64*64*64 - 62
+    length = 32*32*32 - 30
 
-<<<<<<< HEAD
+
     DELTA_A  = 0.02
-=======
-    DELTA_A  = 0.01
->>>>>>> 27cdbc009f60e758e06aba7ecf990cc4003899a3
     PI = 3.14159
     H_0 = 72
     A_INITIAL = 0.2
     a_cross = 10.0 * A_INITIAL
     Np = 32
-<<<<<<< HEAD
     L_BOX = 64.0
     k = 2 * PI / 64.0
-=======
-    L_BOX = 32.0
-    k = 2 * PI / 32.0
->>>>>>> 27cdbc009f60e758e06aba7ecf990cc4003899a3
     D_aini = 1
     amp = 1.0 / (a_cross * k)
     OMEGA_M = 1.0
     OMEGA_L = 0.0
-    r_0 = (10.0*3.086e16)/64.0
+    r_0 = (10.0*3.086e16)/32.0
 
     a_temp = A_INITIAL - (DELTA_A / 2.0)
     D_dot =(math.sqrt(OMEGA_M + OMEGA_L * a_temp**3.0) / math.sqrt(a_temp));
@@ -44,9 +37,10 @@ def readpos():
     for dt in range(200):
         x = []
         v = []
+        y = []
         for i in range(7):
             a = f.readline()
-        for i in range(64):
+        for i in range(32):
             a = f.readline()
             data = a.split()
             x.append(data[0])
@@ -56,18 +50,18 @@ def readpos():
        
         xtest = []
         vtest = []
-        for i in range(64):
-            checkx = (float(i) + temp_a*amp*math.sin(k*float(i)))
+        for i in range(32):
+            checkx = (float(i)*(L_BOX/Np) + temp_a*amp*math.sin(k*float(i)*(L_BOX/Np)))
             xtest.append(checkx)
             temp_a_half = temp_a - (DELTA_A/2.0)
             D_dot =(math.sqrt(OMEGA_M + OMEGA_L * temp_a_half**3.0) / math.sqrt(temp_a_half));
-            checkv = temp_a_half*temp_a_half*D_dot*amp*math.sin(k*float(i))
+            checkv = temp_a_half*temp_a_half*D_dot*amp*math.sin(k*float(i)*(L_BOX/Np))
             vtest.append(checkv)
         
 
-        lx = 63
-        lv = max(v)
-        
+        lx = 64
+        lv = 8.0*(float(dt)/40.0)
+
         if (dt%10 == 0):
             c = next(colors)
             sp.plot(x,v,'o',color=c)
@@ -79,8 +73,8 @@ def readpos():
         #print temp_a,dt
 
         
-    #plt.show()
-    plt.savefig("ZA_pos.jpeg")
+    plt.show()
+    #plt.savefig("ZA_pos.jpeg")
     f.close()
 
     xg = []
@@ -109,7 +103,7 @@ def readdens():
     length = 1000 - 1
     length = 32*32*32 - 30
 
-    for dt in range(20):
+    for dt in range(4):
         x = []
         a = f.readline()
         a = f.readline()
@@ -145,14 +139,14 @@ def checkdensity():
         for i in range(32):
             for j in range(32):
                  a = f.readline()
-                 print a
+                
                  data = a.split()
-                 for k in range(32):
+                 for k in range(len(data)):
                     total = total + float(data[k])
 
             print total
             
-        print 32*32*32
+        print 64*64*64
         f.close()
     
 def testgrav():

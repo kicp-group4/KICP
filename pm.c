@@ -20,14 +20,13 @@ typedef enum {ZELDOVICH,GLASS,ZELDOVICH_COSMO} SimulationType;
 
 double a = A_INITIAL;
 Shape shape = CIC;
-SimulationType sim = GLASS;
+SimulationType sim = ZELDOVICH;
 double accelerationSign = 1.0;
    
 int main(){
 	init();
 	unlink("pos.dat");
 	unlink("density.dat");
-
 	switch(sim) {
 	case ZELDOVICH: ic(a); break;
 	case GLASS:
@@ -42,7 +41,7 @@ int main(){
 	output(a,"pos.dat","density.dat");
 
 	int n;
-	for(n=0;n<20;n++) {
+	for(n=0;n<200;n++) {
 		poissonSolver(a);
 		update_particles(shape,a,accelerationSign);
 		update_density(shape,a);
