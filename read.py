@@ -14,14 +14,23 @@ def readpos():
     length = 1000 - 8
     length = 64*64*64 - 62
 
+<<<<<<< HEAD
     DELTA_A  = 0.02
+=======
+    DELTA_A  = 0.01
+>>>>>>> 27cdbc009f60e758e06aba7ecf990cc4003899a3
     PI = 3.14159
     H_0 = 72
     A_INITIAL = 0.2
     a_cross = 10.0 * A_INITIAL
     Np = 32
+<<<<<<< HEAD
     L_BOX = 64.0
     k = 2 * PI / 64.0
+=======
+    L_BOX = 32.0
+    k = 2 * PI / 32.0
+>>>>>>> 27cdbc009f60e758e06aba7ecf990cc4003899a3
     D_aini = 1
     amp = 1.0 / (a_cross * k)
     OMEGA_M = 1.0
@@ -55,6 +64,7 @@ def readpos():
             checkv = temp_a_half*temp_a_half*D_dot*amp*math.sin(k*float(i))
             vtest.append(checkv)
         
+
         lx = 63
         lv = max(v)
         
@@ -67,6 +77,7 @@ def readpos():
             plt.text(lx,lv,a,color=c)
         temp_a = temp_a + DELTA_A
         #print temp_a,dt
+
         
     #plt.show()
     plt.savefig("ZA_pos.jpeg")
