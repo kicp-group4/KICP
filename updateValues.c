@@ -67,20 +67,19 @@ void update_density(Shape shape, double a) {
 }
 
 void update_particles(Shape shape, double a, double accelerationSign) {
-	double f_of_a, f_of_a_nhalf;
-	double accelx, accely, accelz;
-	int i, j, k, i_min, i_max, j_min, j_max, k_min, k_max, i_max2, i_min2,
-			j_max2, j_min2, k_max2, k_min2;
-	double dx, dy, dz;
-	double tx, ty, tz;
-
-	f_of_a = 1.0 / sqrt((OMEGA_M + OMEGA_L * pow(a, 3.0)) / a);
-	f_of_a_nhalf = 1.0 / sqrt( (OMEGA_M + OMEGA_L * pow((a + DELTA_A / 2.0), 3.0)) / (a + DELTA_A / 2.0));
+	const double f_of_a =1.0 / sqrt((OMEGA_M + OMEGA_L * pow(a, 3.0)) / a);
+	const double f_of_a_nhalf = 1.0 / sqrt( (OMEGA_M + OMEGA_L * pow((a + DELTA_A / 2.0), 3.0)) / (a + DELTA_A / 2.0));
 
 	//calculate acceleration for each grid
 	int n;
 	#pragma omp parallel for private(n)
 	for (n = 0; n < N_PARTICLES; n++) {
+		double accelx, accely, accelz;
+		int i, j, k, i_min, i_max, j_min, j_max, k_min, k_max, i_max2, i_min2,
+				j_max2, j_min2, k_max2, k_min2;
+		double dx, dy, dz;
+		double tx, ty, tz;
+
 		i = (int) (pos.x[n]);
 		dx = (pos.x[n] - i);
 		tx = 1.0 - dx;
