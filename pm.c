@@ -6,6 +6,7 @@
 #include "updateValues.h"
 #include "poissonSolver.h"
 #include "ic_glass.h"
+#include "power_spectrum.h"
 #include <unistd.h>
 
 void init();
@@ -27,6 +28,7 @@ int main(){
 	init();
 	unlink("pos.dat");
 	unlink("density.dat");
+	unlink("Pk.dat");
 
 	switch(sim) {
 	case ZELDOVICH: ic(a); break;
@@ -40,6 +42,7 @@ int main(){
 
 	update_density(shape,a);
 	output(a,"pos.dat","density.dat");
+	power_spectrum();
 
 	int n;
 	for(n=0;n<20;n++) {
@@ -50,6 +53,7 @@ int main(){
 		a+=DELTA_A;
 		printf("Time Step: %i\n",n);
 	}
+	power_spectrum();
 	cleanup();
 	printf("Done!\n");
     return 0;
@@ -57,8 +61,10 @@ int main(){
 
 void init() {
 	poissonSolver_init();
+	power_spectrum_init();
 }
 
 void cleanup() {
 	poissonSolver_cleanup();
+	power_spectrum_cleanup();
 }
