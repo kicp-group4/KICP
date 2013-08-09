@@ -9,47 +9,45 @@ def readpos():
     plt.clf()
     fig = plt.figure(1)
     sp = fig.add_subplot(111)
-
-    #testing123
     
     colors = iter(cm.rainbow(np.linspace(0,1,20)))
     length = 1000 - 8
-    length = 32*32*32 - 30
+    length = 64*64*64 - 62
 
-    DELTA_A  = 0.01
+    DELTA_A  = 0.02
     PI = 3.14159
     H_0 = 72
     A_INITIAL = 0.2
     a_cross = 10.0 * A_INITIAL
     Np = 32
-    L_BOX = 32.0
-    k = 2 * PI / 32.0
+    L_BOX = 64.0
+    k = 2 * PI / 64.0
     D_aini = 1
     amp = 1.0 / (a_cross * k)
     OMEGA_M = 1.0
     OMEGA_L = 0.0
-    r_0 = (10.0*3.086e16)/32.0
+    r_0 = (10.0*3.086e16)/64.0
 
     a_temp = A_INITIAL - (DELTA_A / 2.0)
     D_dot =(math.sqrt(OMEGA_M + OMEGA_L * a_temp**3.0) / math.sqrt(a_temp));
    
     temp_a = A_INITIAL
-    for dt in range(10):
+    for dt in range(200):
         x = []
         v = []
         for i in range(7):
             a = f.readline()
-        for i in range(32):
+        for i in range(64):
             a = f.readline()
             data = a.split()
             x.append(data[0])
             v.append(data[3])
         for i in range(length):
             a = f.readline()
-
+       
         xtest = []
         vtest = []
-        for i in range(32):
+        for i in range(64):
             checkx = (float(i) + temp_a*amp*math.sin(k*float(i)))
             xtest.append(checkx)
             temp_a_half = temp_a - (DELTA_A/2.0)
@@ -57,18 +55,21 @@ def readpos():
             checkv = temp_a_half*temp_a_half*D_dot*amp*math.sin(k*float(i))
             vtest.append(checkv)
         
-        lx = 32
+        lx = 63
         lv = max(v)
         
-        c = next(colors)
-        sp.plot(x,v,'o',color=c)
-        sp.plot(xtest,vtest,'-',color=c)
-        a = "Step #"+str(dt)
-        plt.text(lx,lv,a,color=c)
+        if (dt%10 == 0):
+            c = next(colors)
+            sp.plot(x,v,'o',color=c)
+            sp.plot(xtest,vtest,'-',color=c)
+            print temp_a,dt
+            a = "a = "+str(temp_a)
+            plt.text(lx,lv,a,color=c)
         temp_a = temp_a + DELTA_A
-        print temp_a,dt
+        #print temp_a,dt
         
-    plt.show()
+    #plt.show()
+    plt.savefig("ZA_pos.jpeg")
     f.close()
 
     xg = []
@@ -93,11 +94,11 @@ def readdens():
 
     #testing123
     
-    colors = iter(cm.rainbow(np.linspace(0,1,10)))
+    colors = iter(cm.rainbow(np.linspace(0,1,20)))
     length = 1000 - 1
     length = 32*32*32 - 30
 
-    for dt in range(2):
+    for dt in range(20):
         x = []
         a = f.readline()
         a = f.readline()
@@ -106,12 +107,15 @@ def readdens():
         for i in range(32):
             x.append(i)
             dens.append(data[i])
+        for i in range(31*32):
+            a = f.readline()
         
         lx = 9
         lv = max(dens)
         
         c = next(colors)
         sp.plot(x,dens,'o',color=c)
+        sp.plot(x,dens,'-',color=c)
        
     plt.show()
     f.close()
