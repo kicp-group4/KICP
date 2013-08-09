@@ -4,7 +4,7 @@ extern struct vec3D pos, momentum;
 
 void ic(double a) {
 	int i, j, m, Np;
-	double q, D_aini, D_dot, k, L_NP;
+	double q, D_aini, D_dot, k;
 	/*!
 	 * 
 	 * 	1 - D
@@ -15,7 +15,6 @@ void ic(double a) {
 	 * 
 	 */
 	// POSITION + VELOCITY 
-
 	/* NOTE: D_+(a)=a/a_0, but we assume a_0=1 throughout */
 	Np = GRID_SIZE;
 	k = 2 * PI / L_BOX;
@@ -26,31 +25,27 @@ void ic(double a) {
 
 	double a_temp = A_INITIAL - DELTA_A / 2.0;
 	D_dot = (H_0 * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
-	//D_dot = H_0 * a_temp;
+
 	for (i = 0; i < Np; i++) {
-	  q = i;
+		q = i;
 		for (j = 0; j < Np; j++) {
 			for (m = 0; m < Np; m++) {
 				/* NOTE: 2*PI*q/L_BOX = k*q = 2*PI*i/Np */
-			  pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(2*PI*i/Np));
-	/* printf("%d \t %d \t %d \t %g",i,j,m,( D_aini * amp * sin(2*PI*(i+0.5)/Np))); */
-		
-			  if (pos.x[i + Np * (j + Np * m)] >= GRID_SIZE) {
-			    pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] - (float)(GRID_SIZE);
-			  }
-			  if (pos.x[i + Np * (j + Np * m)] < 0) {
-			    pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + (float)(GRID_SIZE);
-			  }
-			  
-				momentum.x[i + Np * (j + Np * m)] = a_temp*(a_temp * D_dot * amp * sin(2*PI*i/Np))*T_0;
-				pos.y[i + Np * (j + Np * m)] =j;
+				pos.x[i + Np * (j + Np * m)] = (q + D_aini * amp * sin(2 * PI * i / Np));
+
+				if (pos.x[i + Np * (j + Np * m)] >= GRID_SIZE) {
+					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] - (float) (GRID_SIZE);
+				}
+				if (pos.x[i + Np * (j + Np * m)] < 0) {
+					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + (float) (GRID_SIZE);
+				}
+
+				momentum.x[i + Np * (j + Np * m)] = a_temp * (a_temp * D_dot * amp * sin(2 * PI * i / Np)) * T_0;
+				pos.y[i + Np * (j + Np * m)] = j;
 				momentum.y[i + Np * (j + Np * m)] = 0;
-				pos.z[i + Np * (j + Np * m)] =m;
+				pos.z[i + Np * (j + Np * m)] = m;
 				momentum.z[i + Np * (j + Np * m)] = 0;
-			
 			}
 		}
-	       
 	}
-
 }

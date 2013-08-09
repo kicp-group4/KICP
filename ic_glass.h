@@ -4,7 +4,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cblas.h>
-#include "constants.h"
+#include "vec3D.h"
 
 void ic_glass(void);
 

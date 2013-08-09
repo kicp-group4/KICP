@@ -5,14 +5,14 @@ extern struct vec3D pos, momentum;
 void ic_glass() {
 	gsl_rng *rng = gsl_rng_alloc( gsl_rng_mt19937 );
 
-	int i,j,k;
+	int i;
 	for(i=0; i<N_PARTICLES;i++) {
-		for(j=0;j<N_PARTICLES;j++) {
-			for(k=0;k<N_PARTICLES;k++) {
-				pos[i][j][k] = gsl_rng_uniform(rng);
-				momentum[i][j][k] = 0;
-			}
-		}
+		pos.x[i] = gsl_rng_uniform(rng)*GRID_SIZE;
+		pos.y[i] = gsl_rng_uniform(rng)*GRID_SIZE;
+		pos.z[i] = gsl_rng_uniform(rng)*GRID_SIZE;
+		momentum.x[i] = 0;
+		momentum.y[i] = 0;
+		momentum.z[i] = 0;
 	}
 	gsl_rng_free(rng);
 }

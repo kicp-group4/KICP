@@ -7,7 +7,6 @@ void output(double a, char *out_xyz_file, char *out_density) {
 
 	FILE *output;
 	int i, j, k;
-	double a_cubed = a * a * a;
 
 	// POSITION + VELOCITY 
 	output = fopen(out_xyz_file, "a");

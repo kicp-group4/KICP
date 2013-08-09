@@ -6,6 +6,6 @@
 #include <math.h>
 
 void update_density(Shape,double);
-void update_particles(Shape,double);
+void update_particles(Shape,double,double);
 
 #endif /* UPDATEVALUES_H_ */
