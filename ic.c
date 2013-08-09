@@ -26,7 +26,7 @@ void ic(double a) {
 
 	double a_temp = A_INITIAL - DELTA_A / 2.0;
 	D_dot = (H_0 * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
-
+	//D_dot = H_0 * a_temp;
 	for (i = 0; i < Np; i++) {
 	  q = i;
 		for (j = 0; j < Np; j++) {
@@ -41,7 +41,8 @@ void ic(double a) {
 			  if (pos.x[i + Np * (j + Np * m)] < 0) {
 			    pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + (float)(GRID_SIZE);
 			  }
-				momentum.x[i + Np * (j + Np * m)] = a*(A_INITIAL * D_dot * amp * sin(2*PI*i/Np))*T_0;
+			  
+				momentum.x[i + Np * (j + Np * m)] = a_temp*(a_temp * D_dot * amp * sin(2*PI*i/Np))*T_0;
 				pos.y[i + Np * (j + Np * m)] =j;
 				momentum.y[i + Np * (j + Np * m)] = 0;
 				pos.z[i + Np * (j + Np * m)] =m;

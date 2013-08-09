@@ -8,12 +8,12 @@
 #define N_PARTICLES (GRID_SIZE*GRID_SIZE*GRID_SIZE)
 #define H_0 (72*3.241e-20)
 #define G 6.67384e-11
-#define OMEGA_M 0.27
-#define OMEGA_L 0.73
+#define OMEGA_M 1.0
+#define OMEGA_L 0.0
 #define M_PARTICLE (1.0*1.988e30)
 
 #define DELTA_T 0.01
-#define DELTA_A 0.1
+#define DELTA_A 0.01
 #define A_INITIAL 0.2
 #define DELTA_X 1.0
 
