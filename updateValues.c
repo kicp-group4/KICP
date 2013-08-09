@@ -23,7 +23,6 @@ void update_density(Shape shape, double a) {
 
 	//loop through every particle, index of relevant cell is floor( x/(grid size) )
 	for (n = 0; n < N_PARTICLES; n++) {
-
 		i = (int) (pos.x[n]);
 		dx = (pos.x[n] - i);
 		tx = 1.0 - dx;
@@ -80,6 +79,7 @@ void update_particles(Shape shape, double a, double accelerationSign) {
 
 	//calculate acceleration for each grid
 	int n;
+	#pragma omp parallel for private(n)
 	for (n = 0; n < N_PARTICLES; n++) {
 		i = (int) (pos.x[n]);
 		dx = (pos.x[n] - i);
