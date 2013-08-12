@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 import sys
 
-def readpos(gridsize,n_particles_1d,a_initial,delta_a,total_steps,dt=1):
+def readpos(gridsize,n_particles_1d,a_initial,delta_a,snapshot_delta_a,total_steps,dt=1):
     f = open('pos.dat','r')
 
     plt.clf()
@@ -58,13 +58,13 @@ def readpos(gridsize,n_particles_1d,a_initial,delta_a,total_steps,dt=1):
             sp.plot(xtest,vtest,'-',color=c)
             print a,t
 
-        a = a + delta_a
+        a = a + snapshot_delta_a
            
     plt.show()
     #plt.savefig("ZA_pos.jpeg")
     f.close()
 
-def readdens(gridsize,a_initial,delta_a,total_steps,dt):
+def readdens(gridsize,a_initial,delta_a,snapshot_delta_a,total_steps,dt):
     f = open('density.dat','r')
 
     plt.clf()
@@ -96,7 +96,7 @@ def readdens(gridsize,a_initial,delta_a,total_steps,dt):
             sp.plot(x,dens,'-',color=c)
             print a,t
             
-        a = a + delta_a
+        a = a + snapshot_delta_a
        
     plt.show()
     f.close()
@@ -104,11 +104,12 @@ def readdens(gridsize,a_initial,delta_a,total_steps,dt):
 
 
 if __name__ == '__main__':
-    gridsize = sys.argv[1]
-    n_p_1d = sys.argv[2]
-    a_init = sys.argv[3]
-    delta_a = sys.argv[4]
-    total_steps = sys.argv[5]
-    dt_steps = sys.argv[6]
+    gridsize = int(sys.argv[1])
+    n_p_1d = int(sys.argv[2])
+    a_init = float(sys.argv[3])
+    delta_a = float(sys.argv[4])
+    snapshot_delta_a = float(sys.argv[5])
+    total_steps = int(sys.argv[6])
+    dt_steps = int(sys.argv[7])
     readpos(gridsize,n_p_1d,a_init,delta_a,total_steps,dt_steps)
     #readdens(gridsize,a_init,delta_a,total_steps,dt_steps)
