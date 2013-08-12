@@ -63,7 +63,7 @@ def readpos(gridsize,n_particles_1d,a_initial,delta_a,total_steps,dt=1):
     #plt.savefig("ZA_pos.jpeg")
     f.close()
 
-def readdens(gridsize,a_initial,delta_a,total_steps,dt=1):
+def readdens(gridsize,a_initial,delta_a,total_steps,dt):
     f = open('density.dat','r')
 
     plt.clf()
@@ -100,4 +100,12 @@ def readdens(gridsize,a_initial,delta_a,total_steps,dt=1):
     
 
 
-    
+if __name__ == '__main__':
+    gridsize = sys.argv[1]
+    n_p_1d = sys.argv[2]
+    a_init = sys.argv[3]
+    delta_a = sys.argv[4]
+    total_steps = sys.argv[5]
+    dt_steps = sys.argv[6]
+    readpos(gridsize,n_p_1d,a_init,delta_a,total_steps,dt_steps)
+    #readdens(gridsize,a_init,delta_a,total_steps,dt_steps)

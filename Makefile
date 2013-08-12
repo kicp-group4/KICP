@@ -1,27 +1,17 @@
-CFLAGS = -g
+CC=icc
+CFLAGS = -c -O1 -Wall -openmp -p -DSF_CIC -DST_ZELDOVICH
+LDFLAGS= -openmp -p -lm -lfftw3 -lgsl -lgslcblas
+SOURCES=pm.c ic.c output.c poissonSolver.c updateValues.c ic_glass.c power_spectrum.c
+OBJECTS=$(SOURCES:.c=.o)
+EXECUTABLE=pm
 
-objects = pm.o ic.o output.o poissonSolver.o updateValues.o ic_glass.o
+all: $(SOURCES) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-PM_G4 : $(objects)
-	gcc  $(objects) -L/usr/lib -lfftw3 -lm -o PM_G4 -lgsl
-
-pm.o : pm.c constants.h vec3D.h ic.h shape.h updateValues.h poissonSolver.h
-	gcc $(CFLAGS) -c pm.c
-
-ic.o : ic.c ic.h constants.h vec3D.h
-	gcc -c ic.c
-
-output.o : output.c output.h vec3D.h
-	gcc -c output.c
-
-poissonSolver.o : poissonSolver.c poissonSolver.h constants.h
-	gcc -c poissonSolver.c
-
-updateValues.o : updateValues.c updateValues.h vec3D.h shape.h
-	gcc -c updateValues.c
-
-ic_glass.o: ic_glass.c ic_glass.h vec3D.h
-	gcc -c ic_glass.c
+.c.o:
+	$(CC) -o $@ $(CFLAGS) $<
 
 clean:
-	rm -f $(objects) $(objetcs_ps) *.dat
+	rm -f *.o *.dat
