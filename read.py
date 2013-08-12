@@ -13,7 +13,7 @@ def readpos(gridsize,n_particles_1d,a_initial,delta_a,total_steps,dt=1):
     
     n_steps = total_steps/dt
     colors = iter(cm.rainbow(np.linspace(0,1,n_steps)))
-    length = (n_particles_1d)**3 - (n_particles_1d - 2)
+    length = (n_particles_1d)**3 - n_particles_1d
 
     PI = 3.14159
     a_cross = 10.0 * a_initial
@@ -28,12 +28,13 @@ def readpos(gridsize,n_particles_1d,a_initial,delta_a,total_steps,dt=1):
     D_dot =(math.sqrt(OMEGA_M + OMEGA_L * a_half**3.0) / math.sqrt(a_half));
    
     a = a_initial
+    for i in range(7):
+            line = f.readline()
+            
     for t in range(total_steps):
         x = []
         v = []
-        for i in range(7):
-            line = f.readline()
-        for i in range(32):
+        for i in range(n_particles_1d):
             line = f.readline()
             data = line.split()
             x.append(data[0])
@@ -72,15 +73,17 @@ def readdens(gridsize,a_initial,delta_a,total_steps,dt):
     
     n_steps = total_steps/dt
     colors = iter(cm.rainbow(np.linspace(0,1,n_steps)))
-    length = gridsize*gridsize + 1
+    length = gridsize*gridsize - 1
 
     a = a_initial
+    line = f.readline()
+    
     for t in range(total_steps):
         x = []
         dens = []
         line = f.readline()
-        line = f.readline()
         data = line.split()
+        
         for i in range(gridsize):
             x.append(i)
             dens.append(data[i])
