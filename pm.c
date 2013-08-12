@@ -41,18 +41,18 @@ int main(){
 	}
 
 	update_density(shape,a);
-//	power_spectrum();
+	power_spectrum();
 
 	int n;
-	for(n=0;n<50;n++) {
+	for(n=0;n<200;n++) {
 		poissonSolver(a);
 		update_particles(shape,a,accelerationSign);
 		update_density(shape,a);
-		if (n%10 == 0) output(a,"pos.dat","density.dat");
+		output(a,"pos.dat","density.dat");
 		a+=DELTA_A;
 		printf("Time Step: %i\n",n);
 	}
-//	power_spectrum();
+	power_spectrum();
 	cleanup();
 	printf("Done!\n");
     return 0;

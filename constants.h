@@ -5,7 +5,7 @@
 
 #define GRID_SIZE 64
 #define L_BOX 64.0
-#define N_P_1D 128
+#define N_P_1D 32
 #define N_PARTICLES ((N_P_1D)*(N_P_1D)*(N_P_1D))
 #define H_0 (72*3.241e-20)
 #define G 6.67384e-11

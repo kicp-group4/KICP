@@ -11,10 +11,7 @@ def readpos():
     sp = fig.add_subplot(111)
     
     colors = iter(cm.rainbow(np.linspace(0,1,20)))
-    length = 1000 - 8
-    #length = 64*64*64 - 62
     length = 32*32*32 - 30
-
 
     DELTA_A  = 0.02
     PI = 3.14159
@@ -57,37 +54,16 @@ def readpos():
             D_dot =(math.sqrt(OMEGA_M + OMEGA_L * temp_a_half**3.0) / math.sqrt(temp_a_half));
             checkv = temp_a_half*temp_a_half*D_dot*amp*math.sin(k*float(i)*(L_BOX/Np))
             vtest.append(checkv)
-        
 
-        lx = 64
-        lv = 8.0*(float(dt)/40.0)
-
-        if (dt%10 == 0):
+        if dt%10 == 0:
             c = next(colors)
             sp.plot(x,v,'o',color=c)
             sp.plot(xtest,vtest,'-',color=c)
-            print temp_a,dt
-            a = "a = "+str(temp_a)
-            plt.text(lx,lv,a,color=c)
+
         temp_a = temp_a + DELTA_A
-        #print temp_a,dt
 
-        
-    plt.show()
-    #plt.savefig("ZA_pos.jpeg")
-    f.close()
-
-    xg = []
-    f = open('density.dat','r')
-    a = f.readline()
-    a = f.readline()
-    data = a.split()
-    dens = []
-    for i in range(32):
-        step = (10.0/32.0)*float(i)
-        xg.append(step)
-        dens.append(data[i])
-    
+#     plt.show()
+    plt.savefig("ZA_pos.jpeg")
     f.close()
 
 def readdens():
@@ -166,4 +142,5 @@ def testgrav():
     sp.plot(x,grav)
     plt.show()
 
-    
+if __name__ == '__main__':
+    readpos()
