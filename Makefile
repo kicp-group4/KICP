@@ -1,6 +1,6 @@
-CC=gcc
-CFLAGS = -c -O2 -Wall -fmessage-length=0 -fopenmp
-LDFLAGS= -fopenmp -lm -lfftw3 -lgsl -lgslcblas
+CC=icc
+CFLAGS = -c -O1 -Wall -openmp -p -DSF_CIC -DST_ZELDOVICH
+LDFLAGS= -openmp -p -lm -lfftw3 -lgsl -lgslcblas
 SOURCES=pm.c ic.c output.c poissonSolver.c updateValues.c ic_glass.c power_spectrum.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=pm

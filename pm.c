@@ -2,12 +2,14 @@
 #include "vec3D.h"
 #include "ic.h"
 #include "output.h"
-#include "shape.h"
 #include "updateValues.h"
 #include "poissonSolver.h"
-#include "ic_glass.h"
 #include "power_spectrum.h"
 #include <unistd.h>
+
+#ifdef ST_GLASS
+	#include "ic_glass.h"
+#endif
 
 void init();
 void cleanup();
@@ -17,12 +19,7 @@ double rho[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 double phi[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 double delta[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 
-typedef enum {ZELDOVICH,GLASS,ZELDOVICH_COSMO} SimulationType;
-
 double a = A_INITIAL;
-Shape shape = CIC;
-SimulationType sim = ZELDOVICH;
-double accelerationSign = 1.0;
    
 int main(){
 	init();
@@ -30,25 +27,23 @@ int main(){
 	unlink("density.dat");
 	unlink("Pk.dat");
 
-	switch(sim) {
-	case ZELDOVICH: ic(a); break;
-	case GLASS:
-		ic_glass();
-		accelerationSign = -1.0;
-		break;
-	default:
-		cleanup(); fprintf(stderr,"Bad simulation type: %d\n",sim); exit(-1);
-	}
+#ifdef ST_ZELDOVICH
+	ic(a);
+#elif defined ST_GLASS
+	ic_glass();
+#else
+# error "Must specify a simulation type"
+#endif
 
-	update_density(shape,a);
+	update_density(a);
 	power_spectrum();
 
 	int n;
 	for(n=0;n<200;n++) {
 		poissonSolver(a);
-		update_particles(shape,a,accelerationSign);
-		update_density(shape,a);
-		output(a,"pos.dat","density.dat");
+		update_particles(a);
+		update_density(a);
+//		output(a,"pos.dat","density.dat");
 		a+=DELTA_A;
 		printf("Time Step: %i\n",n);
 	}
