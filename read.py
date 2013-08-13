@@ -60,8 +60,8 @@ def readpos(gridsize,n_particles_1d,a_initial,delta_a,snapshot_delta_a,total_ste
 
         a = a + snapshot_delta_a
            
-    plt.show()
-    #plt.savefig("ZA_pos.jpeg")
+#     plt.show()
+    plt.savefig("ZA_pos.jpeg")
     f.close()
 
 def readdens(gridsize,a_initial,delta_a,snapshot_delta_a,total_steps,dt):
@@ -111,5 +111,5 @@ if __name__ == '__main__':
     snapshot_delta_a = float(sys.argv[5])
     total_steps = int(sys.argv[6])
     dt_steps = int(sys.argv[7])
-    readpos(gridsize,n_p_1d,a_init,delta_a,total_steps,dt_steps)
+    readpos(gridsize,n_p_1d,a_init,delta_a,snapshot_delta_a,total_steps,dt_steps)
     #readdens(gridsize,a_init,delta_a,total_steps,dt_steps)

@@ -43,9 +43,9 @@ int main(){
 		poissonSolver(a);
 		update_particles(a);
 		update_density(a);
-//		output(a,"pos.dat","density.dat");
+		if(n%50==0) output(a,"pos.dat","density.dat");
 		a+=DELTA_A;
-		printf("Time Step: %i\n",n);
+//		printf("Time Step: %i\n",n);
 	}
 	power_spectrum();
 	cleanup();

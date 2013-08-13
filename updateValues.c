@@ -1,4 +1,5 @@
 #include "updateValues.h"
+#include <sys/time.h>
 
 extern struct vec3D pos, momentum;
 extern double rho[GRID_SIZE][GRID_SIZE][GRID_SIZE],
@@ -9,16 +10,15 @@ void update_density(double a) {
 	double dx, dy, dz;
 	double tx, ty, tz;
 
-	int x, y, z, i, j, k;
+	int i, j, k;
 	int n, i_max, j_max, k_max;
 	//"reset" the density of the grid
 
-	for (x = 0; x < GRID_SIZE; x++) {
-		for (y = 0; y < GRID_SIZE; y++) {
-			for (z = 0; z < GRID_SIZE; z++) {
-				rho[x][y][z] = 0.0;
-			}
-		}
+	double *p_rho = &rho[0][0][0];
+	#pragma omp parallel for private(n)
+	for(n=0;n<GRID_SIZE*GRID_SIZE*GRID_SIZE;n+=2){
+		p_rho[n] = 0.0;
+		p_rho[n+1] = 0.0;
 	}
 
 	//loop through every particle, index of relevant cell is floor( x/(grid size) )
@@ -41,31 +41,35 @@ void update_density(double a) {
 #ifdef SF_NGP
 		rho[i][j][k] += M_PARTICLE;
 #elif defined SF_CIC
-		rho[i][j][k] += tx * ty * tz *  M_PARTICLE;
-		rho[i_max][j][k] += dx * ty * tz *  M_PARTICLE;
-		rho[i][j_max][k] += tx * dy * tz *  M_PARTICLE;
-		rho[i][j][k_max] += tx * ty * dz *  M_PARTICLE;
-		rho[i][j_max][k_max] += tx * dy * dz *  M_PARTICLE;
-		rho[i_max][j_max][k] += dx * dy * tz *  M_PARTICLE;
-		rho[i_max][j][k_max] += dx * ty * dz *  M_PARTICLE;
-		rho[i_max][j_max][k_max] += dx * dy * dz *  M_PARTICLE;
+		rho[i][j][k] += tx * ty * tz;
+		rho[i_max][j][k] += dx * ty * tz;
+		rho[i][j_max][k] += tx * dy * tz;
+		rho[i][j][k_max] += tx * ty * dz;
+		rho[i][j_max][k_max] += tx * dy * dz;
+		rho[i_max][j_max][k] += dx * dy * tz;
+		rho[i_max][j][k_max] += dx * ty * dz;
+		rho[i_max][j_max][k_max] += dx * dy * dz;
 #else
 #		error "Must specify a shape function"
 #endif
 	}
 
-	for (x = 0; x < GRID_SIZE; x++) {
-		for (y = 0; y < GRID_SIZE; y++) {
-			for (z = 0; z < GRID_SIZE; z++) {
-				delta[x][y][z] = rho[x][y][z] - 1.0;
-			}
-		}
+	double *p_delta = &delta[0][0][0];
+	p_rho = &rho[0][0][0];
+	#pragma omp parallel for private(n)
+	for(n=0;n<GRID_SIZE*GRID_SIZE*GRID_SIZE;n+=2){
+		p_rho[n] *= M_PARTICLE;
+		p_rho[n+1] *= M_PARTICLE;
+		p_delta[n] = p_rho[n] - 1.0;
+		p_delta[n+1] = p_rho[n+1] - 1.0;
 	}
 }
 
 void update_particles(const double a) {
-	const double f_of_a =1.0 / sqrt((OMEGA_M + OMEGA_L * pow(a, 3.0)) / a);
-	const double f_of_a_nhalf = 1.0 / sqrt( (OMEGA_M + OMEGA_L * pow((a + DELTA_A / 2.0), 3.0)) / (a + DELTA_A / 2.0));
+	const register double f_of_a =1.0 / sqrt((OMEGA_M + OMEGA_L * pow(a, 3.0)) / a);
+	const register double f_of_a_nhalf = 1.0 / sqrt( (OMEGA_M + OMEGA_L * pow((a + DELTA_A / 2.0), 3.0)) / (a + DELTA_A / 2.0));
+	const register double momentumScale = f_of_a * DELTA_A;
+	const register double positionScale = f_of_a_nhalf * DELTA_A * pow((a + DELTA_A / 2.0), -2.0);
 
 	//calculate acceleration for each grid
 	int n;
@@ -101,18 +105,12 @@ void update_particles(const double a) {
 		k_min2 = k;
 		k_max2 = (k + 2) % GRID_SIZE;
 
-#ifdef ST_GLASS
-	#define ST_GLASS_ACCEL_SIGN -1*
-#else
-	#define ST_GLASS_ACCEL_SIGN
-#endif
-
 #ifdef SF_NGP
 		accelx = ST_GLASS_ACCEL_SIGN -(phi[i_max][j][k] - phi[i_min][j][k]) / 2.0;
 		accely = ST_GLASS_ACCEL_SIGN -(phi[i][j_max][k] - phi[i][j_min][k]) / 2.0;
 		accelz = ST_GLASS_ACCEL_SIGN -(phi[i][j][k_max] - phi[i][j][k_min]) / 2.0;
 #elif defined SF_CIC
-		accelx = ST_GLASS_ACCEL_SIGN (-(phi[i_max][j][k] - phi[i_min][j][k]) / 2.0) * tx * ty * tz
+		accelx = (-(phi[i_max][j][k] - phi[i_min][j][k]) / 2.0) * tx * ty * tz
 				+ (-(phi[i_max2][j][k] - phi[i_min2][j][k]) / 2.0) * dx * ty * tz
 				+ (-(phi[i_max][j_max][k] - phi[i_min][j_max][k]) / 2.0) * tx * dy * tz
 				+ (-(phi[i_max2][j_max][k] - phi[i_min2][j_max][k]) / 2.0) * dx * dy * tz
@@ -120,7 +118,7 @@ void update_particles(const double a) {
 				+ (-(phi[i_max2][j][k_max] - phi[i_min2][j][k_max]) / 2.0) * dx * ty * dz
 				+ (-(phi[i_max][j_max][k_max] - phi[i_min][j_max][k_max]) / 2.0) * tx * dy * dz
 				+ (-(phi[i_max2][j_max][k_max] - phi[i_min2][j_max][k_max]) / 2.0) * dx * dy * dz;
-		accely = ST_GLASS_ACCEL_SIGN (-(phi[i][j_max][k] - phi[i][j_min][k]) / 2.0) * tx * ty * tz
+		accely = (-(phi[i][j_max][k] - phi[i][j_min][k]) / 2.0) * tx * ty * tz
 				+ (-(phi[i_max][j_max][k] - phi[i_max][j_min][k]) / 2.0) * dx * ty * tz
 				+ (-(phi[i][j_max2][k] - phi[i][j_min2][k]) / 2.0) * tx * dy * tz
 				+ (-(phi[i_max][j_max2][k] - phi[i_max][j_min2][k]) / 2.0) * dx * dy * tz
@@ -128,7 +126,7 @@ void update_particles(const double a) {
 				+ (-(phi[i_max][j_max][k_max] - phi[i_max][j_min][k_max]) / 2.0) * dx * ty * dz
 				+ (-(phi[i][j_max2][k_max] - phi[i][j_min2][k_max]) / 2.0) * tx * dy * dz
 				+ (-(phi[i_max][j_max2][k_max] - phi[i_max][j_min2][k_max]) / 2.0) * dx * dy * dz;
-		accelz = ST_GLASS_ACCEL_SIGN (-(phi[i][j][k_max] - phi[i][j][k_min]) / 2.0) * tx * ty * tz
+		accelz = (-(phi[i][j][k_max] - phi[i][j][k_min]) / 2.0) * tx * ty * tz
 				+ (-(phi[i_max][j][k_max] - phi[i_max][j][k_min]) / 2.0) * dx * ty * tz
 				+ (-(phi[i][j_max][k_max] - phi[i][j_max][k_min]) / 2.0) * tx * dy * tz
 				+ (-(phi[i_max][j_max][k_max] - phi[i_max][j_max][k_min]) / 2.0) * dx * dy * tz
@@ -139,24 +137,31 @@ void update_particles(const double a) {
 #else
 #	error "Must specify a shape function"
 #endif
-#undef ST_GLASS_ACCEL_SIGN
+
+#ifdef ST_GLASS
+	#define ST_GLASS_ACCEL_SIGN -
+#else
+	#define ST_GLASS_ACCEL_SIGN
+#endif
 
 //change momentum first, then position
-		momentum.x[n] += f_of_a * accelx * DELTA_A;
-		momentum.y[n] += f_of_a * accely * DELTA_A;
-		momentum.z[n] += f_of_a * accelz * DELTA_A;
+		momentum.x[n] += ST_GLASS_ACCEL_SIGN accelx * momentumScale;
+		momentum.y[n] += ST_GLASS_ACCEL_SIGN accely * momentumScale;
+		momentum.z[n] += ST_GLASS_ACCEL_SIGN accelz * momentumScale;
 
-		pos.x[n] += pow((a + DELTA_A / 2.0), -2.0) * f_of_a_nhalf * momentum.x[n] * DELTA_A;
-		pos.y[n] += pow((a + DELTA_A / 2.0), -2.0) * f_of_a_nhalf * momentum.y[n] * DELTA_A;
-		pos.z[n] += pow((a + DELTA_A / 2.0), -2.0) * f_of_a_nhalf * momentum.z[n] * DELTA_A;
+#undef ST_GLASS_ACCEL_SIGN
 
+		pos.x[n] += momentum.x[n] * positionScale;
+		pos.y[n] += momentum.y[n] * positionScale;
+		pos.z[n] += momentum.z[n] * positionScale;
+
+		/* Enforce periodic boundary conditions */
 		if (pos.x[n] > L_BOX)
 			pos.x[n] -= L_BOX;
 		if (pos.y[n] > L_BOX)
 			pos.y[n] -= L_BOX;
 		if (pos.z[n] > L_BOX)
 			pos.z[n] -= L_BOX;
-
 		if (pos.x[n] < 0.)
 			pos.x[n] += L_BOX;
 		if (pos.y[n] < 0.)
