@@ -156,17 +156,17 @@ void update_particles(const double a) {
 		pos.z[n] += momentum.z[n] * positionScale;
 
 		/* Enforce periodic boundary conditions */
-		if (pos.x[n] > L_BOX)
-			pos.x[n] -= L_BOX;
-		if (pos.y[n] > L_BOX)
-			pos.y[n] -= L_BOX;
-		if (pos.z[n] > L_BOX)
-			pos.z[n] -= L_BOX;
+		if (pos.x[n] > GRID_SIZE)
+			pos.x[n] -= GRID_SIZE;
+		if (pos.y[n] > GRID_SIZE)
+			pos.y[n] -= GRID_SIZE;
+		if (pos.z[n] > GRID_SIZE)
+			pos.z[n] -= GRID_SIZE;
 		if (pos.x[n] < 0.)
-			pos.x[n] += L_BOX;
+			pos.x[n] += GRID_SIZE;
 		if (pos.y[n] < 0.)
-			pos.y[n] += L_BOX;
+			pos.y[n] += GRID_SIZE;
 		if (pos.z[n] < 0.)
-			pos.z[n] += L_BOX;
+			pos.z[n] += GRID_SIZE;
 	}
 }

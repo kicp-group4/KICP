@@ -12,17 +12,19 @@ void power_spectrum() {
 	FILE *output;
 	int i, l, m, n;
 	double tmp;
-	double volume = GRID_SIZE * GRID_SIZE * GRID_SIZE;
+	double scale = L_BOX / (double)GRID_SIZE;
+	double volume = (GRID_SIZE * GRID_SIZE * GRID_SIZE);
+//	double kny = M_PI * GRID_SIZE / L_BOX;
 	for (i = 0; i < NUM_BINS; i++) {
 		Pk_M[i] = 0.0;
 		av[i] = 0;
-		k_M[i] = M_PI/GRID_SIZE + i * M_PI  / NUM_BINS;
+		k_M[i] = 2*M_PI/(double)GRID_SIZE +   i * (M_PI -2* M_PI/(double)GRID_SIZE)/NUM_BINS;
 	}
 
 	re2co = fftw_plan_dft_r2c_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, &rho[0][0][0], F_rho, FFTW_ESTIMATE);
 	fftw_execute(re2co);
 
-	register const double factor = 2*M_PI / GRID_SIZE;
+	register const double factor = 2 * M_PI / (double)GRID_SIZE;
 	for (l = 0; l < GRID_SIZE; l++) {
 		for (m = 0; m < GRID_SIZE; m++) {
 			for (n = 0; n < GRID_SIZE / 2 + 1; n++) {
@@ -30,7 +32,7 @@ void power_spectrum() {
 				i = 0;
 				tmp = factor * sqrt(l * l + m * m + n * n);
 				while(tmp > k_M[i]) i++;
-				if(i < NUM_BINS && i >= 0){
+				if(i < NUM_BINS && i >= 0 && l+m+n !=0){
 					Pk_M[i] += F_rho[index][0] * F_rho[index][0] + F_rho[index][1] * F_rho[index][1];
 					av[i]++;
 				}
@@ -39,10 +41,10 @@ void power_spectrum() {
 	}
 
 	output = fopen("Pk.dat", "a");
-	for (i = 1; i < NUM_BINS; i++) {
+	for (i = 0; i < NUM_BINS; i++) {
 		if (av[i] != 0) {
-		Pk_M[i] = Pk_M[i] / av[i];
-		fprintf(output, "%g\t%g\n", k_M[i], Pk_M[i] / volume);
+		Pk_M[i] = Pk_M[i] / (double)av[i] / (scale * scale * scale);
+		fprintf(output, "%g\t%g\n", k_M[i]/scale, Pk_M[i]/volume);
 		}
 	}
 	fclose(output);

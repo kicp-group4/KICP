@@ -9,9 +9,7 @@
 #include <math.h>
 #include <fftw3.h>
 #include "vec3D.h"
-
+#include "cosmology.h"
 void cosmo_zeldovich(double a);
-void cosmo_zeldovich_init(int n_ks);
-void cosmo_zeldovich_cleanup();
 
 #endif

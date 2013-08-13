@@ -13,15 +13,15 @@ void output(double a, char *out_xyz_file, char *out_density) {
 	output = fopen(out_xyz_file, "a");
 
 	if(showParameters) {
-		fprintf(output, "%lg\n%d\n%d\n%lg\n%lg\n%lg\n%lg\n",
-				L_BOX, GRID_SIZE, N_PARTICLES, H_0,
-				OMEGA_M, OMEGA_L, M_PARTICLE);
+		fprintf(output, "%d\n%f %f %f %f %f %f \n",
+				N_PARTICLES, 0.0, 0.0, 0.0,
+				(float)GRID_SIZE,(float)GRID_SIZE,(float)GRID_SIZE);
 	}
 
 	for (i = 0; i < N_PARTICLES; i++) {
 		fprintf(output, "%lg %lg %lg %lg %lg %lg\n",
-				pos.x[i] , pos.y[i], pos.z[i],
-				momentum.x[i], momentum.y[i], momentum.z[i]);
+				(float)pos.x[i] , (float)pos.y[i], (float)pos.z[i],
+				(float)momentum.x[i], (float)momentum.y[i], (float)momentum.z[i]);
 	}
 	fclose(output);
 

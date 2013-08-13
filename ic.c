@@ -25,10 +25,10 @@ void ic(double a) {
 
 	double a_temp = A_INITIAL - DELTA_A / 2.0;
 
-	D_dot = (H_0 * sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp));
+	D_dot = sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp);
 
 	for (i = 0; i < Np; i++) {
-	  q = i*(L_BOX/Np);
+	  q = i*(GRID_SIZE/Np);
 		for (j = 0; j < Np; j++) {
 			for (m = 0; m < Np; m++) {
 				/* NOTE: 2*PI*q/L_BOX = k*q = 2*PI*i/Np */
@@ -41,10 +41,10 @@ void ic(double a) {
 					pos.x[i + Np * (j + Np * m)] = pos.x[i + Np * (j + Np * m)] + L_BOX;
 				}
 
-				momentum.x[i + Np * (j + Np * m)] = a_temp * (a_temp * D_dot * amp * sin(2 * PI * i / Np)) * T_0;
-				pos.y[i + Np * (j + Np * m)] = j*(L_BOX/Np);
+				momentum.x[i + Np * (j + Np * m)] = a_temp * (a_temp * D_dot * amp * sin(2 * PI * i / Np));
+				pos.y[i + Np * (j + Np * m)] = j*(GRID_SIZE/Np);
 				momentum.y[i + Np * (j + Np * m)] = 0;
-				pos.z[i + Np * (j + Np * m)] = m*(L_BOX/Np);
+				pos.z[i + Np * (j + Np * m)] = m*(GRID_SIZE/Np);
 				momentum.z[i + Np * (j + Np * m)] = 0;
 				
 			}

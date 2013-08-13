@@ -1,7 +1,7 @@
 CC=icc
-CFLAGS = -c -O3 -Wall -openmp -DSF_CIC -DST_ZELDOVICH
-LDFLAGS= -openmp -lm -lfftw3 -lgsl -lgslcblas
-SOURCES=pm.c ic.c output.c poissonSolver.c updateValues.c ic_glass.c power_spectrum.c
+CFLAGS = -c -O3 -Wall -openmp -DSF_CIC -DST_COSMO_ZELDOVICH -DZ_INI=100
+LDFLAGS= -openmp -lm -lfftw3_omp -lfftw3 -lgsl -lgslcblas
+SOURCES= cosmo_zeldovich.c cosmology.c ic.c ic_glass.c output.c pm.c poissonSolver.c power_spectrum.c updateValues.c 
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=pm
 

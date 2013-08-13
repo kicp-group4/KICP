@@ -6,7 +6,7 @@
 #include <math.h>
 #include <fftw3.h>
 #include "vec3D.h"
-#define NUM_BINS GRID_SIZE
+#define NUM_BINS 40
 
 void power_spectrum();
 void power_spectrum_init();

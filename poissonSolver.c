@@ -1,5 +1,4 @@
 #include "poissonSolver.h"
-#include <stdio.h>
  
 extern double phi[GRID_SIZE][GRID_SIZE][GRID_SIZE], delta[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 
@@ -15,15 +14,9 @@ static fftw_plan r2c, c2r;
 static double greenFunc[FFT_SIZE];
  
 void poissonSolver(double a) {
-	r2c = fftw_plan_dft_r2c_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, &delta[0][0][0], F_delta, FFTW_ESTIMATE);
-    c2r = fftw_plan_dft_c2r_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, F_delta, &phi[0][0][0], FFTW_ESTIMATE);
- 
     fftw_execute(r2c);
 
     int i;
-    /* fftSize is odd, so only process one element at a time
-     * to prevent dealing with halo entries
-     */
 	#pragma omp parallel for private(i)
     for(i=0; i<FFT_SIZE; i+=2){
     	register double tmp = greenFunc[i]/a;
@@ -46,6 +39,8 @@ void poissonSolver(double a) {
 
 void poissonSolver_init() {
 	F_delta = (fftw_complex*)fftw_malloc(FFT_SIZE*sizeof(fftw_complex));
+	r2c = fftw_plan_dft_r2c_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, &delta[0][0][0], F_delta, FFTW_ESTIMATE);
+    c2r = fftw_plan_dft_c2r_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, F_delta, &phi[0][0][0], FFTW_ESTIMATE);
 
 	int l,m,n;
 	for (l=0; l<GRID_SIZE; l++) {

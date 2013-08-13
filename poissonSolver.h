@@ -2,7 +2,9 @@
 #define POISSONSOLVER_H_
 #include "constants.h"
 #include <fftw3.h>
+#include <omp.h>
 #include <math.h>
+#include <stdlib.h>
 
 void poissonSolver(double a);
 void poissonSolver_init(void);
