@@ -5,7 +5,6 @@
 #include "poissonSolver.h"
 #include "power_spectrum.h"
 #include "cosmo_zeldovich.h"
-#include <unistd.h>
 #include <sys/time.h>
 #include <fftw3.h>
 
@@ -31,9 +30,6 @@ double a = A_INITIAL;
 
 int main() {
 	init();
-	unlink("pos.dat");
-	unlink("density.dat");
-	unlink("Pk.dat");
 
 #ifdef ST_ZELDOVICH
 	ic(a);
