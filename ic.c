@@ -25,7 +25,7 @@ void ic(double a) {
 
 	double a_temp = A_INITIAL - DELTA_A / 2.0;
 
-	D_dot = sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp);
+	D_dot = sqrt(cosmology->OmegaM + cosmology->OmegaL * pow(a_temp, 3.0)) / sqrt(a_temp);
 
 	for (i = 0; i < Np; i++) {
 	  q = i*(GRID_SIZE/Np);

@@ -5,7 +5,7 @@ extern struct vec3D pos, momentum;
 void output(double a, char *out_xyz_file) {
 
 	FILE *output;
-	int i, j, k;
+	int i;
 
 	output = fopen(out_xyz_file, "w");
 	fprintf(output, "%d\n%f %f %f %f %f %f \n",

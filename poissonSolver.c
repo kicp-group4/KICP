@@ -54,7 +54,7 @@ void poissonSolver_init() {
 				double s_x = sin(M_PI*l/GRID_SIZE);
 				double s_y = sin(M_PI*m/GRID_SIZE);
 				double s_z = sin(M_PI*n/GRID_SIZE);
-				greenFunc[index] = -3./(8.)/(s_x*s_x + s_y*s_y + s_z*s_z);
+				greenFunc[index] = -3*cosmology->OmegaM/(8.)/(s_x*s_x + s_y*s_y + s_z*s_z);
 			}
 		}
 	}

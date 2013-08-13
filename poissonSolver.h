@@ -1,6 +1,7 @@
 #ifndef POISSONSOLVER_H_
 #define POISSONSOLVER_H_
 #include "constants.h"
+#include "cosmology.h"
 #include <fftw3.h>
 #include <omp.h>
 #include <math.h>

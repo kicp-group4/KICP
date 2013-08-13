@@ -6,6 +6,7 @@
 #include <math.h>
 #include "constants.h"
 #include "vec3D.h"
+#include "cosmology.h"
 
 void ic(double);
 

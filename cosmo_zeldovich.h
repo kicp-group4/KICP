@@ -10,6 +10,7 @@
 #include <fftw3.h>
 #include "vec3D.h"
 #include "cosmology.h"
+
 void cosmo_zeldovich(double a);
 
 #endif

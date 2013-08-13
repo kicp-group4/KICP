@@ -5,6 +5,7 @@
 #include "poissonSolver.h"
 #include "power_spectrum.h"
 #include "cosmo_zeldovich.h"
+#include "cosmology.h"
 #include <sys/time.h>
 #include <fftw3.h>
 
@@ -45,8 +46,7 @@ int main() {
 	struct timeval t1, t2;
 	gettimeofday(&t1, 0);
 
-	char posname[12];
-	char densname[15];
+	char posname[20];
 	int n;
 	for (n = 0; n < 100; n++) {
 		poissonSolver(a);
@@ -54,8 +54,7 @@ int main() {
 		update_density(a);
 		if (n % 20 == 0) {
 			sprintf(posname, "pos_%d.txt", n);
-			sprintf(densname, "density_%d.txt", n);
-			output(a, posname, densname);
+			output(a, posname);
 		}
 		a += DELTA_A;
 	}
@@ -72,6 +71,20 @@ void init() {
 	fftw_init_threads();
 	fftw_plan_with_nthreads(omp_get_max_threads());
 	/*************************************************/
+
+#ifdef ST_COSMO_ZELDOVICH
+	cosmology_set(OmegaM, 0.275);
+	cosmology_set(OmegaL, 0.725);
+	cosmology_set(OmegaB, 0.04);
+#else
+	cosmology_set(OmegaM, 1.0);
+	cosmology_set(OmegaL, 0.0);
+	cosmology_set(OmegaB, 0.04);
+#endif
+
+	cosmology_set(h, 0.702);
+	cosmology_set_thread_safe_range(1.0e-3, 1);
+
 	poissonSolver_init();
 	power_spectrum_init();
 }

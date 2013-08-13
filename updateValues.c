@@ -66,8 +66,8 @@ void update_density(double a) {
 }
 
 void update_particles(const double a) {
-	const register double f_of_a =1.0 / sqrt((OMEGA_M + OMEGA_L * pow(a, 3.0)) / a);
-	const register double f_of_a_nhalf = 1.0 / sqrt( (OMEGA_M + OMEGA_L * pow((a + DELTA_A / 2.0), 3.0)) / (a + DELTA_A / 2.0));
+	const register double f_of_a =1.0 / sqrt((cosmology->OmegaM + cosmology->OmegaL * pow(a, 3.0)) / a);
+	const register double f_of_a_nhalf = 1.0 / sqrt( (cosmology->OmegaM + cosmology->OmegaL * pow((a + DELTA_A / 2.0), 3.0)) / (a + DELTA_A / 2.0));
 	const register double momentumScale = f_of_a * DELTA_A;
 	const register double positionScale = f_of_a_nhalf * DELTA_A * pow((a + DELTA_A / 2.0), -2.0);
 

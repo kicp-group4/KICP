@@ -1,4 +1,3 @@
-#include "ic.h"
 #include "cosmo_zeldovich.h"
 
 extern struct vec3D pos, momentum;
@@ -30,16 +29,10 @@ void cosmo_zeldovich(double a) {
 	double scale = L_BOX / (double) GRID_SIZE;
 	FILE *input;
 
-	cosmology_set(OmegaM, OMEGA_M);
-	cosmology_set(OmegaL, OMEGA_L);
-	cosmology_set(OmegaB, 0.04);
-	cosmology_set(h, 0.702);
-	cosmology_set_thread_safe_range(1.0e-3, 1);
-
 	D_plus = dPlus(a);
 	double a_temp = A_INITIAL - DELTA_A / 2.0;
 
-	D_dot = sqrt(OMEGA_M + OMEGA_L * pow(a_temp, 3.0)) / sqrt(a_temp);
+	D_dot = qPlus(a) * cosmology->h*100 / (a*a);
 
 	gsl_rng *rng = gsl_rng_alloc(gsl_rng_mt19937);
 	for (i = 0; i < GRID_SIZE; i++) {
