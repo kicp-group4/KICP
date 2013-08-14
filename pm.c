@@ -53,7 +53,7 @@ int main() {
 		update_particles(a);
 		update_density(a);
 		if (n % 50 == 0) {
-			sprintf(posname, "pos_%4d.txt", (int)(a*1e4));
+			sprintf(posname, "pos_%04d.txt", (int)(a*1e4));
 			output(a, posname);
 		}
 		a += DELTA_A;
