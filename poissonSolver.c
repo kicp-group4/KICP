@@ -8,10 +8,7 @@ enum {
 };
 static fftw_complex *F_delta;
 static fftw_plan r2c, c2r;
-
-/* This is a cheap trick since we have small boxes. For large simulations,
- * you need a better solution. */
-static double greenFunc[FFT_SIZE];
+static double* greenFunc;
  
 void poissonSolver(double a) {
     fftw_execute(r2c);
@@ -39,6 +36,7 @@ void poissonSolver(double a) {
 
 void poissonSolver_init() {
 	F_delta = (fftw_complex*)fftw_malloc(FFT_SIZE*sizeof(fftw_complex));
+	greenFunc = (double*)malloc(FFT_SIZE*sizeof(double));
 	r2c = fftw_plan_dft_r2c_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, &delta[0][0][0], F_delta, FFTW_ESTIMATE);
     c2r = fftw_plan_dft_c2r_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, F_delta, &phi[0][0][0], FFTW_ESTIMATE);
 

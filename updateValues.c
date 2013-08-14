@@ -21,7 +21,6 @@ void update_density(double a) {
 		p_rho[n+1] = 0.0;
 	}
 
-	//loop through every particle, index of relevant cell is floor( x/(grid size) )
 	for (n = 0; n < N_PARTICLES; n++) {
 		i = (int) (pos.x[n]);
 		dx = (pos.x[n] - i);

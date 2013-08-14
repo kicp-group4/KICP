@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
-#define PI 3.14159
+#include <math.h>
 
 /* ***************************************************
  * Make sure each of these is a power of 2. If they
@@ -28,7 +28,7 @@
 
 #define R_0 (L_BOX/GRID_SIZE)
 #define V_0 (R_0/T_0)
-#define RHO_0 (3*OMEGA_M/(8*PI*G*T_0*T_0))
+#define RHO_0 (3*OMEGA_M/(8*M_PI*G*T_0*T_0))
 #define PHI_0 (V_0*V_0)
 
 #endif
