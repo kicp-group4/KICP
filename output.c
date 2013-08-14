@@ -13,9 +13,8 @@ void output(double a, char *out_xyz_file) {
 				(float) GRID_SIZE, (float) GRID_SIZE, (float) GRID_SIZE);
 
 	for (i = 0; i < N_PARTICLES; i++) {
-		fprintf(output, "%lg %lg %lg %lg %lg %lg\n",
-				(float) pos.x[i], (float) pos.y[i], (float) pos.z[i],
-				(float) momentum.x[i], (float) momentum.y[i], (float) momentum.z[i]);
+		fprintf(output, "%lg %lg %lg\n",
+				(float) pos.x[i], (float) pos.y[i], (float) pos.z[i]);
 	}
 	fclose(output);
 }
