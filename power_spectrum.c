@@ -15,13 +15,13 @@ void power_spectrum() {
 	const double scale = L_BOX / (double) GRID_SIZE;
 	const double volume = (GRID_SIZE * GRID_SIZE * GRID_SIZE);
 
-	for (i = 0; i < NUM_BINS; i++) {
+	for (i = 0; i < NUM_BINS; i+=2) {
 		Pk_M[i] = 0.0; Pk_M[i + 1] = 0.0;
 		av[i] = 0; av[i + 1] = 0;
 		const register double tmp1 = (M_PI - 2 * M_PI / GRID_SIZE) / NUM_BINS;
 		const register double tmp2 = 2 * M_PI / GRID_SIZE;
 		k_M[i] = i * tmp1 + tmp2;
-		k_M[i + 1] = i * tmp1 + tmp2;
+		k_M[i + 1] = (i+1) * tmp1 + tmp2;
 	}
 
 	re2co = fftw_plan_dft_r2c_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, &rho[0][0][0], F_rho, FFTW_ESTIMATE);

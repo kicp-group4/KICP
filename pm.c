@@ -48,34 +48,17 @@ int main() {
 
 	char posname[20];
 	int n;
-	int a_step;
 	for (n = 0; n < 1000; n++) {
 		poissonSolver(a);
 		update_particles(a);
 		update_density(a);
 		if (n % 50 == 0) {
-		  a_step = floor(a*10000);
-		  if (a_step >= 1000){
-		    sprintf(posname, "pos_%d.txt", a_step);
-		    output(a, posname);
-		  }
-		  else if (a_step >= 100){
-		    sprintf(posname, "pos_0%d.txt", a_step);
-		    output(a, posname);
-		  }
-		  else if (a_step >= 10){
-		    sprintf(posname, "pos_00%d.txt", a_step);
-		    output(a, posname);
-		  }
-		  else{
-		    sprintf(posname, "pos_000%d.txt", a_step);
-		    output(a, posname);
-		  }
+			sprintf(posname, "pos_%4d.txt", (int)(a*1e4));
+			output(a, posname);
 		}
 		a += DELTA_A;
 	}
 	gettimeofday(&t2, 0);
-	printf("a = %g",a);
 	printf("time = %lg\n", (t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec) / 1e6);
 	power_spectrum();
 	cleanup();

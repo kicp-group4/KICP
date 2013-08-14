@@ -1,6 +1,6 @@
 #include "output.h"
 
-extern struct vec3D pos, momentum;
+extern struct vec3D pos;
 
 void output(double a, char *out_xyz_file) {
 

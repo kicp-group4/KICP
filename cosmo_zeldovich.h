@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <fftw3.h>
+#include <time.h>
+#include <omp.h>
 #include "vec3D.h"
 #include "cosmology.h"
 
