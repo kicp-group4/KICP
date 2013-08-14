@@ -36,7 +36,7 @@ void poissonSolver(double a) {
 
 void poissonSolver_init() {
 	F_delta = (fftw_complex*)fftw_malloc(FFT_SIZE*sizeof(fftw_complex));
-	greenFunc = (double*)malloc(FFT_SIZE*sizeof(double));
+	greenFunc = (double*)fftw_malloc(FFT_SIZE*sizeof(double));
 	r2c = fftw_plan_dft_r2c_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, &delta[0][0][0], F_delta, FFTW_ESTIMATE);
     c2r = fftw_plan_dft_c2r_3d(GRID_SIZE,GRID_SIZE,GRID_SIZE, F_delta, &phi[0][0][0], FFTW_ESTIMATE);
 
@@ -60,6 +60,7 @@ void poissonSolver_init() {
 
 void poissonSolver_cleanup() {
 	fftw_free(F_delta);
+	fftw_free(greenFunc);
 	fftw_destroy_plan(r2c);
 	fftw_destroy_plan(c2r);
 }

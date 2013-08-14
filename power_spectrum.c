@@ -57,16 +57,16 @@ void power_spectrum() {
 }
 
 void power_spectrum_init() {
-	Pk_M = (double *) malloc(NUM_BINS * sizeof(double));
-	k_M = (double *) malloc(NUM_BINS * sizeof(double));
-	av = (int *) malloc(NUM_BINS * sizeof(int));
+	Pk_M = (double *) fftw_malloc(NUM_BINS * sizeof(double));
+	k_M = (double *) fftw_malloc(NUM_BINS * sizeof(double));
+	av = (int *) fftw_malloc(NUM_BINS * sizeof(int));
 	F_rho = (fftw_complex*) fftw_malloc(fft_size * sizeof(fftw_complex));
 }
 
 void power_spectrum_cleanup() {
-	free(k_M);
-	free(Pk_M);
-	free(av);
+	fftw_free(k_M);
+	fftw_free(Pk_M);
+	fftw_free(av);
 	fftw_free(F_rho);
 	fftw_destroy_plan(re2co);
 }
