@@ -10,7 +10,6 @@ static double *k_M, *Pk_M;
 static int *av;
 
 void power_spectrum(double a) {
-//	printf("Received a = %lg\n",a);
 	FILE *output;
 	int i, l, m, n;
 	const double scale = L_BOX / (double) GRID_SIZE;
@@ -49,11 +48,10 @@ void power_spectrum(double a) {
 
 	char pkname[50];
 	sprintf(pkname, "Pk_%g.dat",1/a-1);
-//	printf("Pk name = %s",pkname);
 	output = fopen(pkname, "w");
 	for (i = 0; i < NUM_BINS; i++) {
 		if (av[i] != 0) {
-			Pk_M[i] = Pk_M[i] / (double) av[i] / (scale * scale * scale);
+			Pk_M[i] = Pk_M[i] / (double) av[i] * (scale * scale * scale);
 			fprintf(output, "%g\t%g\t%g\n", k_M[i] / scale, Pk_M[i] / volume, dPlus(a));
 		}
 	}

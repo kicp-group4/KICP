@@ -38,11 +38,10 @@ void cosmo_zeldovich(double a) {
 
 	cosmo_zeldovich_init(n_k);
 
-	/* With a compile-time constant, we can speed this up */
 	for (j = 0; j < n_k; j++) {
 		fscanf(input, "%lf\t%lf\n", &k[j], &Pk[j]);
 		k[j] *= scale;
-		Pk[j] *= scale * scale * scale;
+		Pk[j] /= scale * scale * scale;
 	}
 	fclose(input);
 

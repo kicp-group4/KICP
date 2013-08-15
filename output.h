@@ -5,6 +5,6 @@
 #include <stdlib.h>
 #include "vec3D.h"
 
-void output(double,char*);
+void output(char*);
 
 #endif /* OUTPUT_H_ */

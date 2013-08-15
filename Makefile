@@ -14,4 +14,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) -o $@ $(CFLAGS) $<
 
 clean:
-	rm -f *.o *.dat pm test.out test.err gmon.out
+	rm -f *.o pm

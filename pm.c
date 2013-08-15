@@ -48,20 +48,20 @@ int main() {
 
 	char posname[20];
 	int n;
-	for (n = 0; n < 2000; n++) {
+	for (n = 0; n < 1980; n++) {
 		poissonSolver(a);
 		update_particles(a);
 		update_density(a);
-//		if (n % 50 == 0) {
-//			sprintf(posname, "pos_%04d.txt", (int)(a*1e4));
-//			output(a, posname);
-//		}
+		if (n % 100 == 0) {
+			sprintf(posname, "pos_%04d.txt", (int)(a*1e4));
+			output(posname);
+		}
 		a += DELTA_A;
 	}
-	output(a,"pos.dat");
+	output(posname);
 	gettimeofday(&t2, 0);
 	printf("time = %lg\n", (t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec) / 1e6);
-	power_spectrum(a);
+	power_spectrum(a-DELTA_A);
 	cleanup();
 	printf("Done!\n");
 	return 0;

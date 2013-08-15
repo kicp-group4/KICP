@@ -13,25 +13,16 @@ static double* greenFunc;
 void poissonSolver(double a) {
     fftw_execute(r2c);
 
-    int i,j,k;
-//	#pragma omp parallel for private(i,j,k)
-    for(i=0;i<GRID_SIZE;i++){
-    	for(j=0;j<GRID_SIZE;j++){
-    		for(k=0;k<(GRID_SIZE/2+1);k++){
-    			register const int index = (i*GRID_SIZE + j)*(GRID_SIZE/2+1) + k;
-    			F_delta[index][0] *= greenFunc[index] / a;
-    			F_delta[index][1] *= greenFunc[index] / a;
-			}
-		}
+    int i;
+	#pragma omp parallel for private(i)
+    for(i=0; i<FFT_SIZE; i+=2){
+    	register double tmp = greenFunc[i]/a;
+		F_delta[i][0] *= tmp;
+		F_delta[i][1] *= tmp;
+    	tmp = greenFunc[i+1]/a;
+		F_delta[i+1][0] *= tmp;
+		F_delta[i+1][1] *= tmp;
     }
-
-//    int i;
-//	#pragma omp parallel for private(i)
-//    for(i=0; i<FFT_SIZE; i++){
-//    	register double tmp = greenFunc[i]/a;
-//		F_delta[i][0] *= tmp;
-//		F_delta[i][1] *= tmp;
-//    }
  
     fftw_execute(c2r);
  

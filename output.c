@@ -2,7 +2,7 @@
 
 extern struct vec3D pos;
 
-void output(double a, char *out_xyz_file) {
+void output(char *out_xyz_file) {
 
 	FILE *output;
 	int i;
@@ -12,9 +12,10 @@ void output(double a, char *out_xyz_file) {
 				N_PARTICLES, 0.0, 0.0, 0.0,
 				(float) GRID_SIZE, (float) GRID_SIZE, (float) GRID_SIZE);
 
-	for (i = 0; i < N_PARTICLES; i++) {
-		fprintf(output, "%lg %lg %lg\n",
-				(float) pos.x[i], (float) pos.y[i], (float) pos.z[i]);
+	for (i = 0; i < N_PARTICLES; i+=2) {
+		fprintf(output, "%lg %lg %lg\n%lg %lg %lg\n",
+				(float) pos.x[i], (float) pos.y[i], (float) pos.z[i],
+				(float) pos.x[i+1], (float) pos.y[i+1], (float) pos.z[i+1]);
 	}
 	fclose(output);
 }
