@@ -1,15 +1,16 @@
 #include "power_spectrum.h"
+#include <stdio.h>
 
 extern double rho[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 
-static const unsigned int fft_size = GRID_SIZE * GRID_SIZE
-		* (GRID_SIZE / 2 + 1);
+static const unsigned int fft_size = GRID_SIZE * GRID_SIZE * (GRID_SIZE / 2 + 1);
 static fftw_complex *F_rho;
 static fftw_plan re2co;
 static double *k_M, *Pk_M;
 static int *av;
 
-void power_spectrum() {
+void power_spectrum(double a) {
+//	printf("Received a = %lg\n",a);
 	FILE *output;
 	int i, l, m, n;
 	const double scale = L_BOX / (double) GRID_SIZE;
@@ -37,20 +38,23 @@ void power_spectrum() {
 				register const double tmp = factor * sqrt(l * l + m * m + n * n);
 				while (tmp > k_M[i])
 					i++;
-				if (i < NUM_BINS && i >= 0 && l + m + n != 0) {
-					Pk_M[i] += F_rho[index][0] * F_rho[index][0]
-							+ F_rho[index][1] * F_rho[index][1];
+				if(i == 0 && tmp < k_M[i]) continue;
+				else if(i < NUM_BINS && i >= 0 && l+m+n !=0){
+					Pk_M[i] += F_rho[index][0] * F_rho[index][0] + F_rho[index][1] * F_rho[index][1];
 					av[i]++;
 				}
 			}
 		}
 	}
 
-	output = fopen("Pk.dat", "a");
+	char pkname[50];
+	sprintf(pkname, "Pk_%g.dat",1/a-1);
+//	printf("Pk name = %s",pkname);
+	output = fopen(pkname, "w");
 	for (i = 0; i < NUM_BINS; i++) {
 		if (av[i] != 0) {
 			Pk_M[i] = Pk_M[i] / (double) av[i] / (scale * scale * scale);
-			fprintf(output, "%g\t%g\n", k_M[i] / scale, Pk_M[i] / volume);
+			fprintf(output, "%g\t%g\t%g\n", k_M[i] / scale, Pk_M[i] / volume, dPlus(a));
 		}
 	}
 	fclose(output);

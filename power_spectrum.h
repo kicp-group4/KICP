@@ -6,9 +6,10 @@
 #include <math.h>
 #include <fftw3.h>
 #include "vec3D.h"
-#define NUM_BINS 40
+#include "cosmology.h"
+#define NUM_BINS GRID_SIZE
 
-void power_spectrum();
+void power_spectrum(double);
 void power_spectrum_init();
 void power_spectrum_cleanup();
 

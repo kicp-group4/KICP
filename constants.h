@@ -7,9 +7,9 @@
  * Make sure each of these is a power of 2. If they
  * are not, you are going to have a very bad time.
  * */
-#define GRID_SIZE 64
-#define L_BOX 64.0		/* This is in MegaParsecs*/
-#define N_P_1D 64
+#define GRID_SIZE 128
+#define L_BOX 100.0		/* This is in MegaParsecs*/
+#define N_P_1D 128
 /****************************************************/
 
 #define N_PARTICLES ((N_P_1D)*(N_P_1D)*(N_P_1D))
@@ -17,7 +17,7 @@
 #define M_PARTICLE ((GRID_SIZE*GRID_SIZE*GRID_SIZE)/((float)N_PARTICLES))
 
 #ifdef ST_COSMO_ZELDOVICH
-	#define DELTA_A 0.01
+	#define DELTA_A 5e-4
 	#define A_INITIAL (1/(1.0+Z_INI))
 #else
 	#define DELTA_A 0.01

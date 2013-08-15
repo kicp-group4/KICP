@@ -25,11 +25,10 @@ void cosmo_zeldovich(double a) {
 	const double scale = L_BOX / (double) GRID_SIZE;
 	FILE *input;
 
+	const double a_temp = a - DELTA_A / 2.0;
 	const double D_plus = dPlus(a);
-	const double D_dot = qPlus(a) * cosmology->h * 100 / (a * a);
-	const double a_temp = A_INITIAL - DELTA_A / 2.0;
-
-	/* Can't all of this messy file business be replaced with a compiled-time constant? */
+	const double D_dot = qPlus(a_temp);
+	
 	n_k = 0;
 	input = fopen("PK_IC", "r");
 	while (fgets(file_line, 50, input) != NULL) {
@@ -73,10 +72,8 @@ void cosmo_zeldovich(double a) {
 			if (m >= GRID_SIZE / 2)
 				y = m - GRID_SIZE;
 			for (n = 0; n < GRID_SIZE / 2 + 1; n++) {
-				register const int index = (l * GRID_SIZE + m)
-						* (GRID_SIZE / 2 + 1) + n;
-				register const double tmp = delta_k
-						* sqrt(x * x + y * y + n * n);
+				register const int index = (l * GRID_SIZE + m) * (GRID_SIZE / 2 + 1) + n;
+				register const double tmp = delta_k * sqrt(x * x + y * y + n * n);
 				i = 0;
 				while (tmp > k[i])
 					i++;
@@ -103,16 +100,13 @@ void cosmo_zeldovich(double a) {
 		}
 	}
 
-	co2re = fftw_plan_dft_c2r_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, F_disp_x,
-			disp_ijk_x, FFTW_ESTIMATE);
+	co2re = fftw_plan_dft_c2r_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, F_disp_x, disp_ijk_x, FFTW_ESTIMATE);
 	fftw_execute(co2re);
 
-	co2re = fftw_plan_dft_c2r_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, F_disp_y,
-			disp_ijk_y, FFTW_ESTIMATE);
+	co2re = fftw_plan_dft_c2r_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, F_disp_y, disp_ijk_y, FFTW_ESTIMATE);
 	fftw_execute(co2re);
 
-	co2re = fftw_plan_dft_c2r_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, F_disp_z,
-			disp_ijk_z, FFTW_ESTIMATE);
+	co2re = fftw_plan_dft_c2r_3d(GRID_SIZE, GRID_SIZE, GRID_SIZE, F_disp_z, disp_ijk_z, FFTW_ESTIMATE);
 	fftw_execute(co2re);
 
 	#pragma omp parallel for private(i)
@@ -129,32 +123,27 @@ void cosmo_zeldovich(double a) {
 	for (i = 0; i < N_P_1D; i++) {
 		for (j = 0; j < N_P_1D; j++) {
 			for (m = 0; m < N_P_1D; m++) {
-				register const int p_index = i + N_P_1D * (j + N_P_1D * m); /* for pos/momentum */
-				register const int d_index = i
-						+ GRID_SIZE * (j + GRID_SIZE * m); /* for disp_ijk_* */
-				pos.x[p_index] = bob * i + D_plus * disp_ijk_x[d_index];
-				pos.y[p_index] = bob * j + D_plus * disp_ijk_y[d_index];
-				pos.z[p_index] = bob * m + D_plus * disp_ijk_z[d_index];
+				register const int index = (i*N_P_1D + j) * N_P_1D + m;
+				pos.x[index] = bob * i + D_plus * disp_ijk_x[index];
+				pos.y[index] = bob * j + D_plus * disp_ijk_y[index];
+				pos.z[index] = bob * m + D_plus * disp_ijk_z[index];
 
-				momentum.x[p_index] = a_temp * a_temp * D_dot
-						* disp_ijk_x[d_index];
-				momentum.y[p_index] = a_temp * a_temp * D_dot
-						* disp_ijk_y[d_index];
-				momentum.z[p_index] = a_temp * a_temp * D_dot
-						* disp_ijk_z[d_index];
+				momentum.x[index] = D_dot * disp_ijk_x[index];
+				momentum.y[index] = D_dot * disp_ijk_y[index];
+				momentum.z[index] = D_dot * disp_ijk_z[index];
 
-				while (pos.x[p_index] > (double) GRID_SIZE)
-					pos.x[p_index] -= (double) GRID_SIZE;
-				while (pos.y[p_index] > (double) GRID_SIZE)
-					pos.y[p_index] -= (double) GRID_SIZE;
-				while (pos.z[p_index] > (double) GRID_SIZE)
-					pos.z[p_index] -= (double) GRID_SIZE;
-				while (pos.x[p_index] < 0.)
-					pos.x[p_index] += (double) GRID_SIZE;
-				while (pos.y[p_index] < 0.)
-					pos.y[p_index] += (double) GRID_SIZE;
-				while (pos.z[p_index] < 0.)
-					pos.z[p_index] += (double) GRID_SIZE;
+				while (pos.x[index] > (double) GRID_SIZE)
+					pos.x[index] -= (double) GRID_SIZE;
+				while (pos.y[index] > (double) GRID_SIZE)
+					pos.y[index] -= (double) GRID_SIZE;
+				while (pos.z[index] > (double) GRID_SIZE)
+					pos.z[index] -= (double) GRID_SIZE;
+				while (pos.x[index] < 0.)
+					pos.x[index] += (double) GRID_SIZE;
+				while (pos.y[index] < 0.)
+					pos.y[index] += (double) GRID_SIZE;
+				while (pos.z[index] < 0.)
+					pos.z[index] += (double) GRID_SIZE;
 			}
 		}
 	}

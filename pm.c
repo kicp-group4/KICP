@@ -41,26 +41,27 @@ int main() {
 #endif
 
 	update_density(a);
-	power_spectrum();
+	power_spectrum(A_INITIAL);
 
 	struct timeval t1, t2;
 	gettimeofday(&t1, 0);
 
 	char posname[20];
 	int n;
-	for (n = 0; n < 1000; n++) {
+	for (n = 0; n < 2000; n++) {
 		poissonSolver(a);
 		update_particles(a);
 		update_density(a);
-		if (n % 50 == 0) {
-			sprintf(posname, "pos_%04d.txt", (int)(a*1e4));
-			output(a, posname);
-		}
+//		if (n % 50 == 0) {
+//			sprintf(posname, "pos_%04d.txt", (int)(a*1e4));
+//			output(a, posname);
+//		}
 		a += DELTA_A;
 	}
+	output(a,"pos.dat");
 	gettimeofday(&t2, 0);
 	printf("time = %lg\n", (t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec) / 1e6);
-	power_spectrum();
+	power_spectrum(a);
 	cleanup();
 	printf("Done!\n");
 	return 0;
@@ -75,13 +76,12 @@ void init() {
 #ifdef ST_COSMO_ZELDOVICH
 	cosmology_set(OmegaM, 0.275);
 	cosmology_set(OmegaL, 0.725);
-	cosmology_set(OmegaB, 0.04);
 #else
 	cosmology_set(OmegaM, 1.0);
 	cosmology_set(OmegaL, 0.0);
-	cosmology_set(OmegaB, 0.04);
 #endif
 
+	cosmology_set(OmegaB, 0.04);
 	cosmology_set(h, 0.702);
 	cosmology_set_thread_safe_range(1.0e-3, 1);
 
