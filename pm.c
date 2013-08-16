@@ -28,6 +28,7 @@ double phi[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 double delta[GRID_SIZE][GRID_SIZE][GRID_SIZE];
 
 double a = A_INITIAL;
+char posname[20];
 
 int main() {
 	init();
@@ -46,14 +47,12 @@ int main() {
 	struct timeval t1, t2;
 	gettimeofday(&t1, 0);
 
-	char posname[20];
 	int n;
 	for (n = 0; n < 1980; n++) {
 		poissonSolver(a);
 		update_particles(a);
 		update_density(a);
-		if (n % 100 == 0) {
-			sprintf(posname, "pos_%04d.txt", (int)(a*1e4));
+		if (n % 50 == 0) {
 			output(posname);
 		}
 		a += DELTA_A;

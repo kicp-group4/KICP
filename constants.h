@@ -4,7 +4,7 @@
 #include <math.h>
 
 /* ***************************************************
- * Make sure each of these is a power of 2. If they
+ * Make sure each of these is a product of 2. If they
  * are not, you are going to have a very bad time.
  * */
 #define GRID_SIZE 128
@@ -23,8 +23,6 @@
 	#define DELTA_A 0.01
 	#define A_INITIAL 0.2
 #endif
-
-//dimensionless scaling values
 
 #define R_0 (L_BOX/GRID_SIZE)
 #define V_0 (R_0/T_0)
